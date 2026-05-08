@@ -1,0 +1,17 @@
+{
+  "startDate": "2026-05-08",
+  "goal": "Best Shape by 60",
+  "goalDate": "2031-10-18",
+  "logs": {},
+  "milestones": {
+    "firstWorkout": false,
+    "streak7": false,
+    "workouts30": false,
+    "cardio500min": false,
+    "streak30": false,
+    "workouts100": false,
+    "cardio1000min": false,
+    "sixMonths": false,
+    "oneYear": false
+  }
+}
