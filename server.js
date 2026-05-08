@@ -212,6 +212,10 @@ app.post('/api/cashin-cheat', (req,res) => {
 });
 
 app.get('/health', (req,res) => res.json({status:'ok'}));
+app.get('/manifest.json', (req,res) => res.sendFile(path.join(__dirname,'manifest.json')));
+app.get('/icon-192.png', (req,res) => res.sendFile(path.join(__dirname,'icon.svg')));
+app.get('/icon-512.png', (req,res) => res.sendFile(path.join(__dirname,'icon.svg')));
+app.get('/icon.svg', (req,res) => res.sendFile(path.join(__dirname,'icon.svg')));
 app.get('/spin-demo.html', (req,res) => res.sendFile(path.join(__dirname,'spin-demo.html')));
 app.get('*', (req,res) => res.sendFile(path.join(__dirname,'index.html')));
 
