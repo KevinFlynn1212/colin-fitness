@@ -3,41 +3,79 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Best Bove 60 🏆</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>Best Bove 60 🎰</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Righteous&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 :root {
   --bg:#0a0f1e; --card:#111827; --card2:#1a2235; --border:#1e2d45;
-  --blue:#0ea5e9; --green:#10b981; --red:#ef4444; --amber:#f59e0b; --purple:#8b5cf6;
+  --blue:#0ea5e9; --green:#10b981; --red:#ef4444; --amber:#f59e0b;
+  --purple:#8b5cf6; --gold:#ffd700; --rose:#ff6b9d;
   --text:#f1f5f9; --muted:#64748b; --nav-h:68px;
 }
 body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; min-height:100vh; overflow-x:hidden; }
+
+/* NAV */
 .nav { position:fixed; bottom:0; left:0; right:0; height:var(--nav-h); background:var(--card); border-top:1px solid var(--border); display:flex; z-index:100; }
 .nav-btn { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; cursor:pointer; color:var(--muted); border:none; background:none; font-family:inherit; transition:color 0.2s; }
-.nav-btn.active { color:var(--blue); }
+.nav-btn.active { color:var(--gold); }
 .nav-btn svg { width:22px; height:22px; }
 .nav-btn span { font-size:11px; font-weight:600; }
+
+/* PAGES */
 .page { display:none; padding:16px 16px calc(var(--nav-h) + 16px); max-width:480px; margin:0 auto; min-height:100vh; }
 .page.active { display:block; }
 .page-header { padding:16px 0 8px; text-align:center; }
-.page-header h1 { font-size:22px; font-weight:800; }
+.page-header h1 { font-size:24px; font-weight:900; font-family:'Righteous',sans-serif; background:linear-gradient(135deg,var(--gold),var(--amber)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .page-header p { color:var(--muted); font-size:14px; margin-top:2px; }
+
+/* CARDS */
 .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; }
-.today-card { background:linear-gradient(135deg,#0c1e3b,#0f2847); border:1px solid var(--blue); border-radius:20px; padding:20px; margin-bottom:16px; text-align:center; }
+.card-gold { border-color:var(--gold); background:linear-gradient(135deg,#1a1500,#0f1828); }
+
+/* TODAY CARD */
+.today-card { background:linear-gradient(135deg,#0c1e3b,#0f2847); border:2px solid var(--blue); border-radius:20px; padding:20px; margin-bottom:16px; text-align:center; position:relative; overflow:hidden; }
+.today-card::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% 0%,rgba(14,165,233,0.1),transparent 70%); pointer-events:none; }
 .today-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--blue); margin-bottom:8px; }
 .today-type { font-size:26px; font-weight:900; margin-bottom:4px; }
 .today-detail { color:var(--muted); font-size:14px; margin-bottom:16px; }
-.today-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(14,165,233,0.15); color:var(--blue); padding:6px 12px; border-radius:20px; font-size:13px; font-weight:600; }
+.today-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(14,165,233,0.15); color:var(--blue); padding:6px 14px; border-radius:20px; font-size:13px; font-weight:600; }
+
+/* CHEAT DAY BANK */
+.cheat-bank { background:linear-gradient(135deg,#1a1000,#1a0a00); border:2px solid var(--gold); border-radius:20px; padding:18px; margin-bottom:12px; position:relative; overflow:hidden; }
+.cheat-bank::before { content:''; position:absolute; inset:0; background:radial-gradient(circle at 50% -20%,rgba(255,215,0,0.15),transparent 60%); pointer-events:none; }
+.cheat-bank-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin-bottom:4px; }
+.cheat-bank-row { display:flex; align-items:center; justify-content:space-between; }
+.cheat-count { font-size:42px; font-weight:900; font-family:'Righteous',sans-serif; color:var(--gold); line-height:1; }
+.cheat-label { font-size:13px; color:var(--muted); margin-top:2px; }
+.cheat-actions { display:flex; flex-direction:column; gap:8px; align-items:flex-end; }
+.btn-cashin { background:linear-gradient(135deg,var(--gold),var(--amber)); color:#000; border:none; font-family:inherit; font-size:13px; font-weight:800; padding:10px 16px; border-radius:12px; cursor:pointer; transition:all 0.15s; }
+.btn-cashin:disabled { opacity:0.4; cursor:not-allowed; }
+.btn-cashin:not(:disabled):hover { transform:scale(1.05); }
+.spin-available { font-size:11px; color:var(--rose); font-weight:700; animation:pulse 1.5s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+/* STATS */
 .stats-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
 .stat-card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:14px; text-align:center; }
-.stat-value { font-size:28px; font-weight:900; line-height:1; }
+.stat-value { font-size:28px; font-weight:900; line-height:1; font-family:'Righteous',sans-serif; }
 .stat-label { font-size:12px; color:var(--muted); margin-top:4px; font-weight:500; }
 .stat-card.blue .stat-value { color:var(--blue); }
 .stat-card.green .stat-value { color:var(--green); }
 .stat-card.red .stat-value { color:var(--red); }
 .stat-card.amber .stat-value { color:var(--amber); }
-.stat-card.purple .stat-value { color:var(--purple); }
+.stat-card.gold { border-color:var(--gold); }
+.stat-card.gold .stat-value { color:var(--gold); }
+
+/* SPIN ALERT */
+.spin-alert { background:linear-gradient(135deg,#1a0020,#200010); border:2px solid var(--rose); border-radius:16px; padding:14px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:12px; animation:borderGlow 2s infinite; }
+@keyframes borderGlow { 0%,100%{border-color:var(--rose)} 50%{border-color:var(--gold)} }
+.spin-alert-text { font-size:14px; font-weight:700; }
+.spin-alert-sub { font-size:12px; color:var(--muted); margin-top:2px; }
+.btn-spin-now { background:linear-gradient(135deg,var(--rose),var(--purple)); color:white; border:none; font-family:inherit; font-size:13px; font-weight:800; padding:10px 16px; border-radius:12px; cursor:pointer; white-space:nowrap; animation:spinBtnPulse 1s infinite; }
+@keyframes spinBtnPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+/* WEEK DOTS */
 .week-dots { display:flex; gap:8px; justify-content:center; margin:8px 0; }
 .week-dot { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; }
 .week-dot.done { background:var(--green); color:white; }
@@ -45,13 +83,17 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 .week-dot.missed { background:rgba(239,68,68,0.2); color:var(--red); border:1px solid var(--red); }
 .week-dot.rest { background:var(--card2); color:var(--muted); }
 .week-dot.future { background:var(--card2); color:var(--muted); border:1px dashed var(--border); }
+
+/* BUTTONS */
 .btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; padding:14px; border-radius:14px; border:none; font-family:inherit; font-size:16px; font-weight:700; cursor:pointer; transition:all 0.15s; }
-.btn-primary { background:var(--blue); color:white; }
-.btn-green { background:var(--green); color:white; }
-.btn-red { background:var(--red); color:white; }
+.btn-primary { background:linear-gradient(135deg,var(--blue),#0284c7); color:white; }
+.btn-green { background:linear-gradient(135deg,var(--green),#059669); color:white; }
+.btn-gold { background:linear-gradient(135deg,var(--gold),var(--amber)); color:#000; }
 .btn-outline { background:transparent; color:var(--blue); border:1.5px solid var(--blue); }
 .btn-sm { padding:8px 14px; font-size:13px; border-radius:10px; width:auto; display:inline-flex; }
 .btn-xs { padding:5px 10px; font-size:12px; border-radius:8px; width:auto; display:inline-flex; }
+
+/* FEEL BUTTONS */
 .feel-row { display:flex; gap:8px; }
 .feel-btn { flex:1; padding:10px; border-radius:10px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
 .feel-btn.selected { border-color:var(--blue); background:rgba(14,165,233,0.15); color:var(--blue); }
@@ -68,9 +110,6 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 .ex-name { font-size:15px; font-weight:700; }
 .ex-machine { font-size:12px; color:var(--muted); margin-top:2px; }
 .ex-target { font-size:12px; color:var(--blue); font-weight:600; }
-.ex-status { font-size:20px; }
-
-/* SET ROWS */
 .sets-table { width:100%; border-collapse:collapse; }
 .sets-table th { font-size:11px; color:var(--muted); font-weight:600; text-transform:uppercase; padding:4px 6px; text-align:center; }
 .sets-table td { padding:5px 4px; text-align:center; }
@@ -82,13 +121,11 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 .set-row.completed td { opacity:0.6; }
 .set-row.completed .set-done-btn { opacity:1; }
 .add-set-btn { display:flex; align-items:center; gap:6px; color:var(--blue); font-size:13px; font-weight:600; cursor:pointer; margin-top:8px; background:none; border:none; font-family:inherit; padding:4px 0; }
-.pr-badge { display:inline-block; background:rgba(245,158,11,0.2); color:var(--amber); padding:2px 8px; border-radius:6px; font-size:11px; font-weight:700; margin-left:8px; }
 
 /* GOAL BAR */
-.goal-bar-wrap { margin-bottom:12px; }
 .goal-bar-label { display:flex; justify-content:space-between; font-size:13px; font-weight:600; margin-bottom:6px; }
-.goal-bar-outer { height:12px; background:var(--border); border-radius:6px; overflow:hidden; }
-.goal-bar-inner { height:100%; border-radius:6px; transition:width 0.5s; }
+.goal-bar-outer { height:10px; background:var(--border); border-radius:5px; overflow:hidden; }
+.goal-bar-inner { height:100%; border-radius:5px; transition:width 0.5s; }
 
 /* FORM */
 .form-group { margin-bottom:16px; }
@@ -96,61 +133,57 @@ body { background:var(--bg); color:var(--text); font-family:'Inter',sans-serif; 
 .form-input { width:100%; padding:12px 14px; background:var(--card2); border:1px solid var(--border); border-radius:12px; color:var(--text); font-family:inherit; font-size:15px; outline:none; transition:border-color 0.2s; }
 .form-input:focus { border-color:var(--blue); }
 textarea.form-input { resize:vertical; min-height:80px; }
-.minutes-display { font-size:36px; font-weight:900; color:var(--blue); text-align:center; margin-bottom:8px; }
-.minutes-display span { font-size:16px; font-weight:600; color:var(--muted); }
+.minutes-display { font-size:42px; font-weight:900; color:var(--blue); text-align:center; margin-bottom:8px; font-family:'Righteous',sans-serif; }
+.minutes-display span { font-size:16px; font-weight:600; color:var(--muted); font-family:'Inter',sans-serif; }
 input[type=range] { width:100%; -webkit-appearance:none; height:6px; border-radius:3px; background:var(--border); outline:none; }
 input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; height:24px; border-radius:50%; background:var(--blue); cursor:pointer; }
 .type-tabs { display:flex; gap:8px; margin-bottom:16px; }
 .type-tab { flex:1; padding:10px; border-radius:10px; border:1.5px solid var(--border); background:transparent; color:var(--muted); font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; }
-.type-tab.active { border-color:var(--blue); background:rgba(14,165,233,0.15); color:var(--blue); }
+.type-tab.active { border-color:var(--gold); background:rgba(255,215,0,0.1); color:var(--gold); }
 .date-selector { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
 .date-selector label { font-size:13px; color:var(--muted); font-weight:600; }
 .date-selector input { flex:1; padding:10px 12px; background:var(--card2); border:1px solid var(--border); border-radius:10px; color:var(--text); font-family:inherit; font-size:14px; outline:none; }
 
 /* REST TIMER */
-.rest-timer { background:var(--card2); border:1px solid var(--border); border-radius:14px; padding:14px; text-align:center; margin-top:10px; display:none; }
-.rest-timer.active { display:block; border-color:var(--amber); }
-.timer-display { font-size:40px; font-weight:900; color:var(--amber); }
+.rest-timer { background:linear-gradient(135deg,#1a1000,#0f1828); border:2px solid var(--gold); border-radius:14px; padding:14px; text-align:center; margin-top:10px; display:none; }
+.rest-timer.active { display:block; }
+.timer-display { font-size:48px; font-weight:900; color:var(--gold); font-family:'Righteous',sans-serif; }
 .timer-label { font-size:12px; color:var(--muted); margin-top:2px; }
 
 /* CALENDAR */
 .cal-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
-.cal-nav { background:var(--card2); border:none; color:var(--text); width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
+.cal-nav { background:var(--card2); border:1px solid var(--border); color:var(--text); width:36px; height:36px; border-radius:50%; cursor:pointer; font-size:16px; display:flex; align-items:center; justify-content:center; }
 .cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
 .cal-day-label { text-align:center; font-size:11px; font-weight:700; color:var(--muted); padding:4px 0; }
-.cal-day { aspect-ratio:1; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; cursor:pointer; transition:all 0.15s; }
+.cal-day { aspect-ratio:1; border-radius:10px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; font-size:12px; font-weight:700; cursor:pointer; transition:all 0.15s; }
 .cal-day.empty { background:transparent; cursor:default; }
 .cal-day.rest { background:var(--card2); color:var(--muted); }
 .cal-day.done { background:rgba(16,185,129,0.25); color:var(--green); }
 .cal-day.missed { background:rgba(239,68,68,0.15); color:var(--red); }
 .cal-day.today { outline:2px solid var(--blue); }
 .cal-day.future { background:var(--card2); color:var(--muted); opacity:0.5; }
-.cal-day { flex-direction:column; gap:1px; }
 .cal-day-num { font-size:12px; font-weight:700; line-height:1; }
-.cal-day-icon { font-size:11px; line-height:1; }
+.cal-day-icon { font-size:10px; line-height:1; }
 .log-detail { background:var(--card2); border:1px solid var(--border); border-radius:14px; padding:14px; margin-top:12px; }
 .log-detail h4 { font-size:15px; font-weight:700; margin-bottom:8px; }
 .log-detail p { font-size:13px; color:var(--muted); margin-bottom:4px; }
 .log-detail p strong { color:var(--text); }
 
 /* PROGRESS */
-.goal-card { background:linear-gradient(135deg,#0c1e0f,#0f2d1a); border:1px solid var(--green); border-radius:20px; padding:20px; text-align:center; margin-bottom:16px; }
-.goal-days { font-size:52px; font-weight:900; color:var(--green); line-height:1; }
+.goal-card { background:linear-gradient(135deg,#0c1e0f,#0f2d1a); border:2px solid var(--green); border-radius:20px; padding:20px; text-align:center; margin-bottom:16px; }
+.goal-days { font-size:52px; font-weight:900; color:var(--green); line-height:1; font-family:'Righteous',sans-serif; }
 .goal-label { font-size:14px; color:var(--muted); margin-top:4px; }
 .goal-title { font-size:18px; font-weight:800; margin-top:8px; }
 .prog-bar-outer { height:8px; background:var(--border); border-radius:4px; overflow:hidden; margin-top:8px; }
 .prog-bar-inner { height:100%; border-radius:4px; transition:width 0.5s; }
-.section-title { font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; color:var(--muted); margin:16px 0 8px; }
+.section-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--gold); margin:16px 0 8px; font-family:'Righteous',sans-serif; }
 
-/* PR TABLE */
-.pr-table { width:100%; }
+/* PR / BLOOD */
 .pr-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
 .pr-row:last-child { border-bottom:none; }
 .pr-name { font-size:13px; font-weight:600; }
 .pr-val { font-size:14px; font-weight:700; color:var(--amber); }
 .pr-date { font-size:11px; color:var(--muted); }
-
-/* BLOOD */
 .blood-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border); }
 .blood-row:last-child { border-bottom:none; }
 .blood-label { font-size:13px; font-weight:600; }
@@ -168,20 +201,47 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 .milestone-desc { font-size:12px; color:var(--muted); margin-top:2px; }
 .milestone-item.locked { opacity:0.4; }
 
-/* OVERLAY */
-.overlay { position:fixed; inset:0; background:rgba(0,0,0,0.8); display:none; align-items:center; justify-content:center; z-index:200; }
+/* SPIN WHEEL OVERLAY */
+.spin-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.92); display:none; align-items:center; justify-content:center; z-index:300; flex-direction:column; padding:20px; }
+.spin-overlay.show { display:flex; }
+.spin-title { font-family:'Righteous',sans-serif; font-size:28px; color:var(--gold); text-align:center; margin-bottom:4px; }
+.spin-subtitle { font-size:14px; color:var(--muted); text-align:center; margin-bottom:24px; }
+.wheel-wrap { position:relative; width:300px; height:300px; margin-bottom:24px; }
+.wheel-pointer { position:absolute; top:-16px; left:50%; transform:translateX(-50%); font-size:28px; z-index:10; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
+#spin-wheel { width:300px; height:300px; border-radius:50%; border:4px solid var(--gold); box-shadow:0 0 30px rgba(255,215,0,0.4); transition:transform 4s cubic-bezier(0.17,0.67,0.12,0.99); display:block; }
+.spin-btn-wrap { display:flex; flex-direction:column; align-items:center; gap:12px; }
+#btn-do-spin { background:linear-gradient(135deg,var(--gold),var(--amber)); color:#000; border:none; font-family:'Righteous',sans-serif; font-size:20px; padding:16px 48px; border-radius:16px; cursor:pointer; box-shadow:0 4px 20px rgba(255,215,0,0.4); transition:all 0.15s; }
+#btn-do-spin:hover { transform:scale(1.05); }
+#btn-do-spin:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.spin-result { text-align:center; display:none; }
+.spin-result.show { display:block; }
+.spin-result-icon { font-size:56px; margin-bottom:8px; }
+.spin-result-title { font-family:'Righteous',sans-serif; font-size:26px; color:var(--gold); margin-bottom:6px; }
+.spin-result-desc { font-size:15px; color:var(--muted); margin-bottom:20px; }
+
+/* SUCCESS OVERLAY */
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,0.85); display:none; align-items:center; justify-content:center; z-index:200; }
 .overlay.show { display:flex; }
-.overlay-card { background:var(--card); border:1px solid var(--green); border-radius:24px; padding:32px 24px; text-align:center; max-width:300px; animation:popIn 0.3s ease; }
-@keyframes popIn { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
+.overlay-card { background:var(--card); border:2px solid var(--gold); border-radius:24px; padding:32px 24px; text-align:center; max-width:300px; animation:popIn 0.3s ease; box-shadow:0 0 40px rgba(255,215,0,0.2); }
+@keyframes popIn { from{transform:scale(0.7) rotate(-3deg);opacity:0} to{transform:scale(1) rotate(0deg);opacity:1} }
 .overlay-icon { font-size:56px; margin-bottom:12px; }
-.overlay-title { font-size:22px; font-weight:900; color:var(--green); margin-bottom:8px; }
+.overlay-title { font-size:22px; font-weight:900; color:var(--gold); margin-bottom:8px; font-family:'Righteous',sans-serif; }
 .overlay-sub { font-size:15px; color:var(--muted); margin-bottom:20px; }
-.confetti-piece { position:fixed; width:8px; height:8px; border-radius:2px; pointer-events:none; z-index:300; animation:fall 2s ease-in forwards; }
-@keyframes fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+.overlay-streak { font-size:28px; font-weight:900; color:var(--rose); font-family:'Righteous',sans-serif; }
+
+/* PARTICLES */
+.particle { position:fixed; pointer-events:none; z-index:400; animation:particleFall linear forwards; border-radius:2px; }
+@keyframes particleFall { 0%{transform:translateY(-10px) rotate(0deg) scale(1);opacity:1} 100%{transform:translateY(100vh) rotate(720deg) scale(0.5);opacity:0} }
+.coin { position:fixed; pointer-events:none; z-index:400; font-size:20px; animation:coinFloat ease-out forwards; }
+@keyframes coinFloat { 0%{transform:translateY(0) scale(1);opacity:1} 100%{transform:translateY(-120px) scale(0);opacity:0} }
 
 /* BODY WEIGHT */
 .bw-row { display:flex; gap:10px; align-items:center; }
 .bw-input { flex:1; padding:10px 12px; background:var(--card2); border:1px solid var(--border); border-radius:10px; color:var(--text); font-family:inherit; font-size:16px; font-weight:700; outline:none; }
+
+/* CHEAT HISTORY */
+.cheat-history-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
+.cheat-history-item:last-child { border-bottom:none; }
 </style>
 </head>
 <body>
@@ -189,10 +249,35 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 <!-- HOME -->
 <div class="page active" id="page-home">
   <div class="page-header">
-    <h1>🏆 Best Bove 60</h1>
+    <h1>🎰 Best Bove 60</h1>
     <p id="motivational-msg">Let's get to work.</p>
   </div>
 
+  <!-- SPIN ALERT -->
+  <div id="spin-alert" style="display:none;" class="spin-alert">
+    <div>
+      <div class="spin-alert-text">🎰 You earned a spin!</div>
+      <div class="spin-alert-sub" id="spin-alert-reason">Streak reward unlocked</div>
+    </div>
+    <button class="btn-spin-now" onclick="openSpinWheel()">SPIN NOW</button>
+  </div>
+
+  <!-- CHEAT DAY BANK -->
+  <div class="cheat-bank">
+    <div class="cheat-bank-title">💰 Cheat Day Bank</div>
+    <div class="cheat-bank-row">
+      <div>
+        <div class="cheat-count" id="cheat-count">0</div>
+        <div class="cheat-label">cheat days banked</div>
+      </div>
+      <div class="cheat-actions">
+        <button class="btn-cashin" id="btn-cashin" onclick="cashInCheatDay()" disabled>Cash In 🎲</button>
+        <div id="cashin-note" style="font-size:11px;color:var(--muted);text-align:right;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TODAY CARD -->
   <div class="today-card" id="today-card">
     <div class="today-label">TODAY'S WORKOUT</div>
     <div class="today-type" id="today-type">Loading...</div>
@@ -200,23 +285,23 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <div class="today-badge" id="today-badge"></div>
   </div>
 
+  <!-- STATS -->
   <div class="stats-row">
-    <div class="stat-card blue"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">🔥 Day Streak</div></div>
+    <div class="stat-card gold"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">🔥 Day Streak</div></div>
     <div class="stat-card amber"><div class="stat-value" id="stat-days-to-60">—</div><div class="stat-label">📅 Days to 60</div></div>
     <div class="stat-card green"><div class="stat-value" id="stat-month-done">0</div><div class="stat-label">✅ This Month</div></div>
     <div class="stat-card red"><div class="stat-value" id="stat-missed">0</div><div class="stat-label">❌ Missed</div></div>
   </div>
 
+  <!-- GOAL + WEEK -->
   <div class="card">
-    <div class="form-label">Workout Goal Progress</div>
-    <div class="goal-bar-wrap">
-      <div class="goal-bar-label">
-        <span id="home-workouts-done">0 workouts</span>
-        <span id="home-workouts-left" style="color:var(--muted)">— to go</span>
-      </div>
-      <div class="goal-bar-outer"><div class="goal-bar-inner" id="home-goal-bar" style="background:var(--blue);width:0%"></div></div>
+    <div class="form-label">Workout Goal</div>
+    <div class="goal-bar-label">
+      <span id="home-workouts-done">0 workouts</span>
+      <span id="home-workouts-left" style="color:var(--muted)">— to go</span>
     </div>
-    <div class="form-label" style="margin-top:12px;">This Week</div>
+    <div class="goal-bar-outer"><div class="goal-bar-inner" id="home-goal-bar" style="background:linear-gradient(90deg,var(--blue),var(--gold));width:0%"></div></div>
+    <div class="form-label" style="margin-top:14px;">This Week</div>
     <div class="week-dots" id="week-dots"></div>
     <div style="display:flex;justify-content:space-between;margin-top:8px;">
       <span style="font-size:12px;color:var(--muted)">Mon — Fri</span>
@@ -234,13 +319,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 <!-- LOG -->
 <div class="page" id="page-log">
   <div class="page-header"><h1>📝 Log Workout</h1><p>Track every rep and minute</p></div>
-
   <div class="date-selector">
     <label>Date</label>
     <input type="date" id="log-date" onchange="updateLogDateLabel()">
-    <span id="log-date-type" style="font-size:13px;font-weight:700;color:var(--blue);"></span>
+    <span id="log-date-type" style="font-size:13px;font-weight:700;color:var(--gold);"></span>
   </div>
-
   <div class="type-tabs">
     <button class="type-tab active" onclick="setLogType('cardio')" id="tab-cardio">🚴 Cardio</button>
     <button class="type-tab" onclick="setLogType('strength')" id="tab-strength">💪 Strength</button>
@@ -293,18 +376,16 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
   <!-- STRENGTH -->
   <div id="form-strength" style="display:none;">
     <div id="exercise-cards"></div>
-
     <div class="rest-timer" id="rest-timer">
       <div class="timer-display" id="timer-display">1:30</div>
-      <div class="timer-label">Rest Timer</div>
+      <div class="timer-label">⏱️ Rest Timer</div>
       <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;">
         <button class="btn-xs btn-outline" onclick="setRestTimer(60)">60s</button>
         <button class="btn-xs btn-outline" onclick="setRestTimer(90)">90s</button>
         <button class="btn-xs btn-outline" onclick="setRestTimer(120)">2m</button>
-        <button class="btn-xs" style="background:var(--red);color:white;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:700;padding:5px 10px;font-size:12px;" onclick="stopTimer()">Stop</button>
+        <button class="btn-xs" style="background:var(--red);color:white;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:700;padding:5px 10px;font-size:12px;" onclick="stopTimer()">✕ Stop</button>
       </div>
     </div>
-
     <div class="form-group" style="margin-top:16px;">
       <label class="form-label">How did it feel overall?</label>
       <div class="feel-row">
@@ -353,7 +434,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
   <div class="card">
     <div class="cal-header">
       <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
-      <span style="font-weight:700;font-size:16px;" id="cal-title"></span>
+      <span style="font-weight:700;font-size:16px;font-family:'Righteous',sans-serif;" id="cal-title"></span>
       <button class="cal-nav" onclick="changeMonth(1)">›</button>
     </div>
     <div class="cal-grid" id="cal-grid"></div>
@@ -364,14 +445,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 <!-- PROGRESS -->
 <div class="page" id="page-progress">
   <div class="page-header"><h1>📊 Progress</h1><p>Your journey to 60</p></div>
-
   <div class="goal-card">
     <div class="goal-days" id="prog-days-left">—</div>
     <div class="goal-label">days until your 60th birthday</div>
     <div class="goal-title">🏆 Best Bove 60</div>
   </div>
-
-  <!-- BODY WEIGHT -->
   <div class="card">
     <div class="form-label">Log Body Weight (lbs)</div>
     <div class="bw-row">
@@ -380,54 +458,36 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     </div>
     <div style="font-size:12px;color:var(--muted);margin-top:8px;" id="bw-display">No weight logged yet</div>
   </div>
-
   <div class="section-title">Workout Goal</div>
   <div class="card">
-    <div class="goal-bar-label" style="display:flex;justify-content:space-between;font-size:13px;font-weight:600;margin-bottom:8px;">
+    <div class="goal-bar-label">
       <span id="prog-workouts-done">0 / 500 workouts</span>
-      <span id="prog-pct" style="color:var(--blue)">0%</span>
+      <span id="prog-pct" style="color:var(--gold)">0%</span>
     </div>
-    <div class="goal-bar-outer"><div class="goal-bar-inner" id="prog-goal-bar" style="background:linear-gradient(90deg,var(--blue),var(--green));width:0%"></div></div>
+    <div class="goal-bar-outer"><div class="goal-bar-inner" id="prog-goal-bar" style="background:linear-gradient(90deg,var(--blue),var(--gold));width:0%"></div></div>
     <div style="font-size:12px;color:var(--muted);margin-top:8px;" id="prog-workouts-left">500 workouts to go</div>
   </div>
-
   <div class="section-title">Stats</div>
   <div class="stats-row">
     <div class="stat-card blue"><div class="stat-value" id="prog-total">0</div><div class="stat-label">Total Workouts</div></div>
     <div class="stat-card green"><div class="stat-value" id="prog-cardio-min">0</div><div class="stat-label">Cardio Minutes</div></div>
     <div class="stat-card amber"><div class="stat-value" id="prog-longest">0</div><div class="stat-label">Longest Streak</div></div>
-    <div class="stat-card purple"><div class="stat-value" id="prog-volume">0</div><div class="stat-label">Total Volume (lbs)</div></div>
+    <div class="stat-card" style="border-color:var(--purple);"><div class="stat-value" style="color:var(--purple);" id="prog-volume">0</div><div class="stat-label">Volume (lbs)</div></div>
   </div>
-
   <div class="section-title">Personal Records 🏆</div>
   <div class="card" id="pr-list"></div>
-
+  <div class="section-title">Cheat Day History</div>
+  <div class="card" id="cheat-history-list"></div>
   <div class="section-title">Health Snapshot</div>
   <div class="card">
     <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Blood work baseline — May 2026</div>
-    <div class="blood-row">
-      <div><div class="blood-label">Fasting Glucose</div><div class="blood-sub">Target: &lt;5.5 mmol/L</div></div>
-      <div style="text-align:right"><div class="blood-value watch">6.1 ⚠️</div><div class="blood-sub">Pre-diabetic range</div></div>
-    </div>
-    <div class="blood-row">
-      <div><div class="blood-label">LDL Cholesterol</div><div class="blood-sub">Target: &lt;2.1 mmol/L</div></div>
-      <div style="text-align:right"><div class="blood-value ok">1.7 ✅</div><div class="blood-sub">Excellent</div></div>
-    </div>
-    <div class="blood-row">
-      <div><div class="blood-label">HDL Cholesterol</div><div class="blood-sub">Target: &gt;0.9 mmol/L</div></div>
-      <div style="text-align:right"><div class="blood-value ok">1.3 ✅</div><div class="blood-sub">Good</div></div>
-    </div>
-    <div class="blood-row">
-      <div><div class="blood-label">HbA1c</div><div class="blood-sub">3-month avg glucose</div></div>
-      <div style="text-align:right"><div class="blood-value ok">5.0% ✅</div><div class="blood-sub">Normal</div></div>
-    </div>
-    <div class="blood-row">
-      <div><div class="blood-label">Triglycerides</div><div class="blood-sub">Target: &lt;2.3 mmol/L</div></div>
-      <div style="text-align:right"><div class="blood-value ok">1.1 ✅</div><div class="blood-sub">Excellent</div></div>
-    </div>
+    <div class="blood-row"><div><div class="blood-label">Fasting Glucose</div><div class="blood-sub">Target: &lt;5.5 mmol/L</div></div><div style="text-align:right"><div class="blood-value watch">6.1 ⚠️</div><div class="blood-sub">Pre-diabetic range</div></div></div>
+    <div class="blood-row"><div><div class="blood-label">LDL Cholesterol</div><div class="blood-sub">Target: &lt;2.1 mmol/L</div></div><div style="text-align:right"><div class="blood-value ok">1.7 ✅</div><div class="blood-sub">Excellent</div></div></div>
+    <div class="blood-row"><div><div class="blood-label">HDL Cholesterol</div><div class="blood-sub">Target: &gt;0.9 mmol/L</div></div><div style="text-align:right"><div class="blood-value ok">1.3 ✅</div><div class="blood-sub">Good</div></div></div>
+    <div class="blood-row"><div><div class="blood-label">HbA1c</div><div class="blood-sub">3-month avg glucose</div></div><div style="text-align:right"><div class="blood-value ok">5.0% ✅</div><div class="blood-sub">Normal</div></div></div>
+    <div class="blood-row"><div><div class="blood-label">Triglycerides</div><div class="blood-sub">Target: &lt;2.3 mmol/L</div></div><div style="text-align:right"><div class="blood-value ok">1.1 ✅</div><div class="blood-sub">Excellent</div></div></div>
     <div style="margin-top:10px;font-size:12px;color:var(--muted);">💊 Two statins + daily aspirin</div>
   </div>
-
   <div class="section-title">Milestones</div>
   <div class="card" id="milestones-list"></div>
 </div>
@@ -438,7 +498,28 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <div class="overlay-icon" id="overlay-icon">💪</div>
     <div class="overlay-title" id="overlay-title">Workout Logged!</div>
     <div class="overlay-sub" id="overlay-sub">Keep it up!</div>
-    <button class="btn btn-green" onclick="closeOverlay()">Let's Go! 🚀</button>
+    <div class="overlay-streak" id="overlay-streak" style="display:none;margin-bottom:12px;"></div>
+    <button class="btn btn-gold" onclick="closeOverlay()" style="font-family:'Righteous',sans-serif;">Let's Go! 🎰</button>
+  </div>
+</div>
+
+<!-- SPIN WHEEL OVERLAY -->
+<div class="spin-overlay" id="spin-overlay">
+  <div class="spin-title">🎰 SPIN THE WHEEL</div>
+  <div class="spin-subtitle" id="spin-subtitle">You earned this — spin for your reward!</div>
+  <div class="wheel-wrap">
+    <div class="wheel-pointer">▼</div>
+    <canvas id="spin-wheel" width="300" height="300"></canvas>
+  </div>
+  <div class="spin-btn-wrap">
+    <button id="btn-do-spin" onclick="doSpin()">SPIN! 🎰</button>
+    <div class="spin-result" id="spin-result">
+      <div class="spin-result-icon" id="spin-result-icon">🎉</div>
+      <div class="spin-result-title" id="spin-result-title">Winner!</div>
+      <div class="spin-result-desc" id="spin-result-desc"></div>
+      <button class="btn btn-gold" onclick="closeSpinWheel()" style="font-family:'Righteous',sans-serif;margin-top:4px;">COLLECT REWARD 💰</button>
+    </div>
+    <button class="btn btn-outline btn-sm" onclick="closeSpinWheel()" style="margin-top:8px;" id="btn-skip-spin">Skip for now</button>
   </div>
 </div>
 
@@ -464,10 +545,10 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 <script>
 let appData = null;
 let calYear = new Date().getFullYear(), calMonth = new Date().getMonth();
-let currentLogType = 'cardio';
-let selectedZone = 'zone2', selectedFeel = 'good';
-let selectedCardioMachine = '';
+let currentLogType = 'cardio', selectedZone = 'zone2', selectedFeel = 'good', selectedCardioMachine = '';
 let timerInterval = null, timerSeconds = 0;
+let spinAngle = 0, spinPrize = null, spinTier = 'small';
+let pendingSpinReason = '';
 
 const WORKOUT_SCHEDULE = {
   1:{type:'strength',label:'Full Body Strength',detail:'45 min — machines + cables',badge:'💪 Strength Day'},
@@ -480,87 +561,67 @@ const WORKOUT_SCHEDULE = {
 };
 
 const EXERCISES = [
-  {
-    id:'leg-press', name:'Leg Press', machine:'Leg Press Machine',
-    targets:'Quads, Glutes, Hamstrings',
-    prescription:'3 sets × 12 reps | Start: 90 lbs',
-    sets:[
-      {reps:12, weight:90, unit:'lbs'},
-      {reps:12, weight:90, unit:'lbs'},
-      {reps:12, weight:90, unit:'lbs'},
-    ]
-  },
-  {
-    id:'cable-rows', name:'Cable Rows', machine:'Cable Row Machine (use wrist straps)',
-    targets:'Back, Biceps',
-    prescription:'3 sets × 12 reps | Start: 40 lbs',
-    sets:[
-      {reps:12, weight:40, unit:'lbs'},
-      {reps:12, weight:40, unit:'lbs'},
-      {reps:12, weight:40, unit:'lbs'},
-    ]
-  },
-  {
-    id:'chest-press', name:'Machine Chest Press', machine:'Chest Press Machine',
-    targets:'Chest, Triceps, Shoulders',
-    prescription:'3 sets × 12 reps | Start: 50 lbs',
-    sets:[
-      {reps:12, weight:50, unit:'lbs'},
-      {reps:12, weight:50, unit:'lbs'},
-      {reps:12, weight:50, unit:'lbs'},
-    ]
-  },
-  {
-    id:'shoulder-press', name:'Machine Shoulder Press', machine:'Shoulder Press Machine',
-    targets:'Deltoids, Triceps',
-    prescription:'3 sets × 12 reps | Start: 30 lbs',
-    sets:[
-      {reps:12, weight:30, unit:'lbs'},
-      {reps:12, weight:30, unit:'lbs'},
-      {reps:12, weight:30, unit:'lbs'},
-    ]
-  },
-  {
-    id:'rdl', name:'Romanian Deadlift', machine:'Cable Machine / Light Dumbbells (use wrist straps)',
-    targets:'Hamstrings, Glutes, Lower Back',
-    prescription:'3 sets × 10 reps | Start: 30 lbs',
-    sets:[
-      {reps:10, weight:30, unit:'lbs'},
-      {reps:10, weight:30, unit:'lbs'},
-      {reps:10, weight:30, unit:'lbs'},
-    ]
-  },
-  {
-    id:'plank', name:'Plank', machine:'Floor / Mat',
-    targets:'Core, Stability',
-    prescription:'3 sets × 30 seconds | Build to 60s',
-    sets:[
-      {reps:30, weight:null, unit:'sec'},
-      {reps:30, weight:null, unit:'sec'},
-      {reps:30, weight:null, unit:'sec'},
-    ]
-  },
+  {id:'leg-press',name:'Leg Press',machine:'Leg Press Machine',targets:'Quads, Glutes, Hamstrings',prescription:'3 sets × 12 reps | Start: 90 lbs',sets:[{reps:12,weight:90,unit:'lbs'},{reps:12,weight:90,unit:'lbs'},{reps:12,weight:90,unit:'lbs'}]},
+  {id:'cable-rows',name:'Cable Rows',machine:'Cable Row Machine (wrist straps)',targets:'Back, Biceps',prescription:'3 sets × 12 reps | Start: 40 lbs',sets:[{reps:12,weight:40,unit:'lbs'},{reps:12,weight:40,unit:'lbs'},{reps:12,weight:40,unit:'lbs'}]},
+  {id:'chest-press',name:'Machine Chest Press',machine:'Chest Press Machine',targets:'Chest, Triceps, Shoulders',prescription:'3 sets × 12 reps | Start: 50 lbs',sets:[{reps:12,weight:50,unit:'lbs'},{reps:12,weight:50,unit:'lbs'},{reps:12,weight:50,unit:'lbs'}]},
+  {id:'shoulder-press',name:'Machine Shoulder Press',machine:'Shoulder Press Machine',targets:'Deltoids, Triceps',prescription:'3 sets × 12 reps | Start: 30 lbs',sets:[{reps:12,weight:30,unit:'lbs'},{reps:12,weight:30,unit:'lbs'},{reps:12,weight:30,unit:'lbs'}]},
+  {id:'rdl',name:'Romanian Deadlift',machine:'Cable Machine / Dumbbells (wrist straps)',targets:'Hamstrings, Glutes, Lower Back',prescription:'3 sets × 10 reps | Start: 30 lbs',sets:[{reps:10,weight:30,unit:'lbs'},{reps:10,weight:30,unit:'lbs'},{reps:10,weight:30,unit:'lbs'}]},
+  {id:'plank',name:'Plank',machine:'Floor / Mat',targets:'Core, Stability',prescription:'3 sets × 30 seconds',sets:[{reps:30,weight:null,unit:'sec'},{reps:30,weight:null,unit:'sec'},{reps:30,weight:null,unit:'sec'}]},
 ];
 
 const MILESTONES = [
   {key:'firstWorkout',icon:'🔥',name:'First Step',desc:'Log your first workout'},
-  {key:'streak7',icon:'📅',name:'7-Day Streak',desc:'7 consecutive days of activity'},
-  {key:'workouts30',icon:'💪',name:'30 Workouts',desc:'Complete 30 total sessions'},
-  {key:'cardio500min',icon:'🏃',name:'500 Cardio Minutes',desc:'500 minutes of Zone 2 cardio'},
-  {key:'streak30',icon:'🔥',name:'30-Day Streak',desc:'30 consecutive days of activity'},
-  {key:'workouts100',icon:'💪',name:'100 Workouts',desc:'Complete 100 total sessions'},
-  {key:'cardio1000min',icon:'🏆',name:'1000 Cardio Minutes',desc:'Serious cardio commitment'},
+  {key:'streak7',icon:'📅',name:'7-Day Streak',desc:'7 consecutive days — earn a spin!'},
+  {key:'workouts30',icon:'💪',name:'30 Workouts',desc:'Complete 30 total sessions — earn a spin!'},
+  {key:'cardio500min',icon:'🏃',name:'500 Cardio Minutes',desc:'500 minutes of Zone 2 — earn a spin!'},
+  {key:'streak30',icon:'🔥',name:'30-Day Streak',desc:'30 consecutive days — earn a BIG spin!'},
+  {key:'workouts100',icon:'💪',name:'100 Workouts',desc:'Complete 100 sessions — earn a BIG spin!'},
+  {key:'cardio1000min',icon:'🏆',name:'1000 Cardio Minutes',desc:'Serious cardio — earn a JACKPOT spin!'},
   {key:'sixMonths',icon:'⭐',name:'6 Months Strong',desc:'6 months since you started'},
   {key:'oneYear',icon:'🎯',name:'One Year In',desc:'365 days on the journey'},
   {key:'placeholder',icon:'🏆',name:'Best Bove 60',desc:'The ultimate goal — October 2031'},
 ];
 
-// Exercise state
-let exSets = {}; // exId -> [{reps, weight, completed}]
+// SPIN WHEEL PRIZES by tier
+const SPIN_PRIZES = {
+  small: [
+    {label:'1 Cheat Day',icon:'🎲',cheatDays:1,desc:'Bank 1 cheat day — use it anytime!'},
+    {label:'Skip Cardio',icon:'🏖️',cheatDays:0,special:'skip_cardio',desc:'Skip your next cardio session guilt-free!'},
+    {label:'1 Cheat Day',icon:'🎲',cheatDays:1,desc:'Bank 1 cheat day — use it anytime!'},
+    {label:'Light Week',icon:'😌',cheatDays:0,special:'light_week',desc:'Cut reps/weight in half for one week!'},
+    {label:'1 Cheat Day',icon:'🎲',cheatDays:1,desc:'Bank 1 cheat day — use it anytime!'},
+    {label:'Extra Rest',icon:'😴',cheatDays:0,special:'rest_day',desc:'Bank a free rest day this week!'},
+  ],
+  medium: [
+    {label:'2 Cheat Days',icon:'🎰',cheatDays:2,desc:'Bank 2 cheat days — you earned it!'},
+    {label:'Skip Cardio',icon:'🏖️',cheatDays:0,special:'skip_cardio',desc:'Skip your next cardio session guilt-free!'},
+    {label:'2 Cheat Days',icon:'🎰',cheatDays:2,desc:'Bank 2 cheat days — you earned it!'},
+    {label:'1 Cheat Day',icon:'🎲',cheatDays:1,desc:'Bank 1 cheat day!'},
+    {label:'Light Week',icon:'😌',cheatDays:0,special:'light_week',desc:'Half intensity week — well deserved!'},
+    {label:'2 Cheat Days',icon:'🎰',cheatDays:2,desc:'Bank 2 cheat days — you earned it!'},
+  ],
+  jackpot: [
+    {label:'JACKPOT! 5 Days',icon:'💰',cheatDays:5,desc:'JACKPOT! 5 cheat days banked!'},
+    {label:'3 Cheat Days',icon:'🏆',cheatDays:3,desc:'3 cheat days — legendary!'},
+    {label:'3 Cheat Days',icon:'🏆',cheatDays:3,desc:'3 cheat days — legendary!'},
+    {label:'Full Rest Week',icon:'🌴',cheatDays:0,special:'rest_week',desc:'Take a full recovery week — you\'ve earned it!'},
+    {label:'3 Cheat Days',icon:'🏆',cheatDays:3,desc:'3 cheat days — legendary!'},
+    {label:'JACKPOT! 5 Days',icon:'💰',cheatDays:5,desc:'JACKPOT! 5 cheat days banked!'},
+  ],
+};
+
+const WHEEL_COLORS = {
+  small: ['#1a3a1a','#0f2847','#1a3a1a','#0f2847','#1a3a1a','#0f2847'],
+  medium: ['#1a2a00','#0f1847','#1a2a00','#0f1847','#1a2a00','#0f1847'],
+  jackpot: ['#2a1a00','#1a0030','#2a1a00','#1a0030','#2a1a00','#1a0030'],
+};
+
+let exSets = {};
 
 async function init() {
   await loadData();
   renderHome(); renderLog(); renderCalendar(); renderProgress();
+  checkPendingSpins();
 }
 
 async function loadData() {
@@ -568,15 +629,14 @@ async function loadData() {
     const res = await fetch('/api/data');
     appData = await res.json();
   } catch(e) {
-    appData = {logs:{},stats:{currentStreak:0,longestStreak:0,totalCardioMinutes:0,totalStrengthSessions:0,totalWorkouts:0,zone2Compliance:0,monthWorkouts:0,monthMissed:0,weekDone:0,weekTotal:5,daysUntilGoal:1826,workoutsToGoal:500,workoutGoalProgress:0,totalVolume:0,milestones:{}},prs:{},bodyWeight:{}};
+    appData = {logs:{},stats:{currentStreak:0,longestStreak:0,totalCardioMinutes:0,totalStrengthSessions:0,totalWorkouts:0,zone2Compliance:0,monthWorkouts:0,monthMissed:0,weekDone:0,weekTotal:5,daysUntilGoal:1826,workoutsToGoal:500,workoutGoalProgress:0,totalVolume:0,milestones:{}},prs:{},bodyWeight:{},cheatDays:0,spinsAvailable:{},cheatHistory:[]};
   }
 }
 
 // HOME
 function renderHome() {
   const stats = appData.stats;
-  const today = new Date(), dow = today.getDay();
-  const schedule = WORKOUT_SCHEDULE[dow];
+  const today = new Date(), dow = today.getDay(), schedule = WORKOUT_SCHEDULE[dow];
   document.getElementById('today-type').textContent = schedule.label;
   document.getElementById('today-detail').textContent = schedule.detail;
   document.getElementById('today-badge').innerHTML = schedule.badge;
@@ -586,9 +646,15 @@ function renderHome() {
     document.getElementById('today-badge').innerHTML = '✅ Logged today!';
   }
   document.getElementById('stat-streak').textContent = stats.currentStreak;
-  document.getElementById('stat-days-to-60').textContent = stats.daysUntilGoal?.toLocaleString() || '—';
+  document.getElementById('stat-days-to-60').textContent = stats.daysUntilGoal?.toLocaleString()||'—';
   document.getElementById('stat-month-done').textContent = stats.monthWorkouts;
   document.getElementById('stat-missed').textContent = stats.monthMissed;
+
+  const cheatDays = appData.cheatDays || 0;
+  document.getElementById('cheat-count').textContent = cheatDays;
+  const cashBtn = document.getElementById('btn-cashin');
+  cashBtn.disabled = cheatDays === 0;
+  document.getElementById('cashin-note').textContent = cheatDays > 0 ? `${cheatDays} day${cheatDays>1?'s':''} available` : 'Earn by spinning!';
 
   const pct = stats.workoutGoalProgress || 0;
   document.getElementById('home-goal-bar').style.width = pct + '%';
@@ -599,14 +665,13 @@ function renderHome() {
   weekDots.innerHTML = '';
   const days = ['M','T','W','T','F'];
   const monday = new Date(today);
-  monday.setDate(today.getDate() - (today.getDay()===0?6:today.getDay()-1));
-  for (let i = 0; i < 5; i++) {
+  monday.setDate(today.getDate()-(today.getDay()===0?6:today.getDay()-1));
+  for (let i=0;i<5;i++) {
     const d = new Date(monday); d.setDate(monday.getDate()+i);
     const ds = d.toISOString().split('T')[0];
-    const isToday = ds===todayStr, logged = appData.logs[ds], isPast = d<today&&!isToday;
+    const isToday=ds===todayStr, logged=appData.logs[ds], isPast=d<today&&!isToday;
     let cls = logged?'done':isToday?'today':isPast?'missed':'future';
-    const dot = document.createElement('div');
-    dot.className = `week-dot ${cls}`; dot.textContent = days[i];
+    const dot = document.createElement('div'); dot.className=`week-dot ${cls}`; dot.textContent=days[i];
     weekDots.appendChild(dot);
   }
   document.getElementById('week-fraction').textContent = `${stats.weekDone} / 5`;
@@ -614,43 +679,170 @@ function renderHome() {
 
   const streak = stats.currentStreak;
   let msg = "Let's get to work.";
-  if (streak>=30) msg = "A full month of consistency. You're becoming someone different. 🌟";
-  else if (streak>=7) msg = `${streak} days straight. That's a habit forming. 💪`;
-  else if (streak>=3) msg = `${streak} days strong 🔥`;
-  else if (streak>=1) msg = `${streak} day streak — keep it going!`;
+  if (streak>=30) msg="A full month of consistency. You're a different person now. 🌟";
+  else if (streak>=7) msg=`${streak} days straight. That's a habit forming. 💪`;
+  else if (streak>=3) msg=`${streak} days strong 🔥`;
+  else if (streak>=1) msg=`${streak} day streak — keep rolling!`;
   document.getElementById('motivational-msg').textContent = msg;
+
+  checkPendingSpins();
+}
+
+function checkPendingSpins() {
+  const spins = appData.spinsAvailable || {};
+  const available = Object.keys(spins).filter(k=>spins[k]);
+  if (available.length > 0) {
+    document.getElementById('spin-alert').style.display = 'flex';
+    const reasons = {streak7:'🔥 7-day streak reward!',streak14:'🔥 14-day streak reward!',streak30:'🔥 30-day streak reward!',workouts30:'💪 30 workouts milestone!',workouts100:'💪 100 workouts milestone!',cardio500:'🏃 500 cardio minutes!',cardio1000:'🏆 1000 cardio minutes!'};
+    document.getElementById('spin-alert-reason').textContent = reasons[available[0]] || 'Milestone reward unlocked';
+    pendingSpinReason = available[0];
+  } else {
+    document.getElementById('spin-alert').style.display = 'none';
+  }
+}
+
+// SPIN WHEEL
+function getTierForReason(reason) {
+  if (['cardio1000','workouts100'].includes(reason)) return 'jackpot';
+  if (['streak30','workouts30','cardio500'].includes(reason)) return 'medium';
+  return 'small';
+}
+
+function openSpinWheel() {
+  spinTier = getTierForReason(pendingSpinReason);
+  const tierLabels = {small:'Streak Reward 🎲',medium:'Milestone Bonus 🎰',jackpot:'JACKPOT SPIN 💰'};
+  document.getElementById('spin-subtitle').textContent = tierLabels[spinTier] || 'You earned this!';
+  document.getElementById('spin-overlay').classList.add('show');
+  document.getElementById('btn-do-spin').disabled = false;
+  document.getElementById('spin-result').classList.remove('show');
+  document.getElementById('btn-skip-spin').style.display = 'inline-flex';
+  drawWheel(0);
+}
+
+function drawWheel(rotation) {
+  const canvas = document.getElementById('spin-wheel');
+  const ctx = canvas.getContext('2d');
+  const prizes = SPIN_PRIZES[spinTier];
+  const colors = WHEEL_COLORS[spinTier];
+  const numSlices = prizes.length;
+  const sliceAngle = (2*Math.PI)/numSlices;
+  const cx=150, cy=150, r=148;
+  ctx.clearRect(0,0,300,300);
+  for (let i=0;i<numSlices;i++) {
+    const start = rotation + i*sliceAngle;
+    const end = start + sliceAngle;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath();
+    ctx.fillStyle = colors[i%colors.length]; ctx.fill();
+    ctx.strokeStyle='rgba(255,215,0,0.4)'; ctx.lineWidth=1; ctx.stroke();
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(start+sliceAngle/2);
+    ctx.textAlign='right'; ctx.fillStyle='#ffd700'; ctx.font='bold 11px Inter';
+    ctx.fillText(prizes[i].label, r-8, 4);
+    ctx.font='14px Arial'; ctx.fillText(prizes[i].icon, r-60, 18);
+    ctx.restore();
+  }
+  // Center circle
+  ctx.beginPath(); ctx.arc(cx,cy,24,0,2*Math.PI);
+  ctx.fillStyle='#ffd700'; ctx.fill();
+  ctx.fillStyle='#000'; ctx.font='bold 12px Righteous,Inter'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('GO',cx,cy);
+}
+
+function doSpin() {
+  document.getElementById('btn-do-spin').disabled = true;
+  document.getElementById('btn-skip-spin').style.display = 'none';
+  const prizes = SPIN_PRIZES[spinTier];
+  const numSlices = prizes.length;
+  const sliceAngle = (2*Math.PI)/numSlices;
+  // Pick random prize
+  const prizeIndex = Math.floor(Math.random()*numSlices);
+  // Calculate rotation to land on prize (pointer is at top = -π/2)
+  const extraSpins = (5+Math.floor(Math.random()*3))*2*Math.PI;
+  const targetAngle = extraSpins + (2*Math.PI - (prizeIndex*sliceAngle + sliceAngle/2)) - Math.PI/2;
+  spinPrize = prizes[prizeIndex];
+  // Animate
+  let start=null, duration=4000, initAngle=spinAngle;
+  function animate(ts) {
+    if (!start) start=ts;
+    const elapsed=ts-start, progress=Math.min(elapsed/duration,1);
+    const ease = 1-Math.pow(1-progress,4);
+    const current = initAngle + (targetAngle-initAngle)*ease;
+    spinAngle = current;
+    drawWheel(current);
+    if (progress<1) { requestAnimationFrame(animate); }
+    else { showSpinResult(); }
+  }
+  requestAnimationFrame(animate);
+}
+
+function showSpinResult() {
+  document.getElementById('spin-result-icon').textContent = spinPrize.icon;
+  document.getElementById('spin-result-title').textContent = spinPrize.label;
+  document.getElementById('spin-result-desc').textContent = spinPrize.desc;
+  document.getElementById('spin-result').classList.add('show');
+  launchCoins(40);
+}
+
+async function closeSpinWheel() {
+  document.getElementById('spin-overlay').classList.remove('show');
+  if (spinPrize) {
+    // Apply reward
+    await applySpinReward(spinPrize, pendingSpinReason);
+    spinPrize = null;
+  }
+}
+
+async function applySpinReward(prize, reason) {
+  try {
+    await fetch('/api/spin-reward', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({prize, reason})
+    });
+    await loadData();
+    renderHome(); renderProgress();
+    if (prize.cheatDays > 0) spawnCoins(document.getElementById('cheat-count'));
+  } catch(e) {}
+}
+
+async function cashInCheatDay() {
+  if ((appData.cheatDays||0) === 0) return;
+  const confirmed = confirm('Cash in 1 cheat day? Today will be logged as a free rest day. 🎲');
+  if (!confirmed) return;
+  try {
+    await fetch('/api/cashin-cheat', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:getToday()})});
+    await loadData();
+    renderHome(); renderProgress(); renderCalendar();
+    launchCoins(20);
+  } catch(e) {}
 }
 
 // LOG
-function updateLogDateLabel() {
-  const val = document.getElementById('log-date').value;
-  if (!val) return;
-  const dow = new Date(val + 'T12:00:00').getDay();
-  const schedule = WORKOUT_SCHEDULE[dow];
-  const icons = {cardio:'🚴 Cardio Day', strength:'💪 Strength Day', active:'🐕 Walk Day', rest:'😴 Rest Day'};
-  document.getElementById('log-date-type').textContent = icons[schedule.type] || '';
-  setLogType(schedule.type);
-}
-
 function renderLog() {
   document.getElementById('log-date').value = getToday();
   buildExerciseCards();
   updateLogDateLabel();
 }
 
+function updateLogDateLabel() {
+  const val = document.getElementById('log-date').value;
+  if (!val) return;
+  const dow = new Date(val+'T12:00:00').getDay();
+  const schedule = WORKOUT_SCHEDULE[dow];
+  const icons = {cardio:'🚴 Cardio Day',strength:'💪 Strength Day',active:'🐕 Walk Day',rest:'😴 Rest Day'};
+  document.getElementById('log-date-type').textContent = icons[schedule.type]||'';
+  setLogType(schedule.type);
+}
+
 function buildExerciseCards() {
   const container = document.getElementById('exercise-cards');
-  container.innerHTML = '';
-  exSets = {};
-  EXERCISES.forEach(ex => {
-    exSets[ex.id] = ex.sets.map(s => ({...s, completed:false}));
-    const card = document.createElement('div');
-    card.className = 'ex-card';
-    card.id = `excard-${ex.id}`;
-    card.innerHTML = `
+  container.innerHTML = ''; exSets = {};
+  EXERCISES.forEach((ex,idx) => {
+    exSets[ex.id] = ex.sets.map(s=>({...s,completed:false}));
+    const card = document.createElement('div'); card.className='ex-card'; card.id=`excard-${ex.id}`;
+    card.innerHTML=`
       <div class="ex-header" onclick="toggleExCard('${ex.id}')">
         <div>
-          <div class="ex-name">${ex.name} <span class="ex-status" id="exstatus-${ex.id}">○</span></div>
+          <div class="ex-name">${ex.name} <span id="exstatus-${ex.id}">○</span></div>
           <div class="ex-machine">📍 ${ex.machine}</div>
           <div class="ex-target" style="margin-top:3px;">🎯 ${ex.prescription}</div>
         </div>
@@ -658,231 +850,160 @@ function buildExerciseCards() {
       </div>
       <div id="exbody-${ex.id}" style="display:none;">
         <table class="sets-table">
-          <thead><tr>
-            <th>Set</th>
-            <th>${ex.id==='plank'?'Time (sec)':'Reps'}</th>
-            ${ex.id!=='plank'?'<th>Weight (lbs)</th>':''}
-            <th>Done</th>
-          </tr></thead>
+          <thead><tr><th>Set</th><th>${ex.id==='plank'?'Sec':'Reps'}</th>${ex.id!=='plank'?'<th>Weight (lbs)</th>':''}<th>Done</th></tr></thead>
           <tbody id="setrows-${ex.id}"></tbody>
         </table>
         <button class="add-set-btn" onclick="addSet('${ex.id}')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="M12 5v14M5 12h14"/></svg>
-          Add Set
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px"><path d="M12 5v14M5 12h14"/></svg> Add Set
         </button>
-        ${appData.prs&&appData.prs[ex.id]?`<div style="margin-top:8px;font-size:12px;color:var(--muted);">🏆 PR: <strong style="color:var(--amber)">${appData.prs[ex.id].weight} lbs × ${appData.prs[ex.id].reps} reps</strong> (${appData.prs[ex.id].date})</div>`:''}
-      </div>
-    `;
+        ${appData.prs&&appData.prs[ex.id]?`<div style="margin-top:8px;font-size:12px;color:var(--muted);">🏆 PR: <strong style="color:var(--gold)">${appData.prs[ex.id].weight} lbs × ${appData.prs[ex.id].reps} reps</strong> (${appData.prs[ex.id].date})</div>`:''}
+      </div>`;
     container.appendChild(card);
     renderSetRows(ex.id);
-    // Auto-open first exercise
-    if (ex.id === EXERCISES[0].id) toggleExCard(ex.id);
+    if (idx===0) toggleExCard(ex.id);
   });
 }
 
 function renderSetRows(exId) {
-  const tbody = document.getElementById(`setrows-${exId}`);
-  const ex = EXERCISES.find(e=>e.id===exId);
-  tbody.innerHTML = '';
-  exSets[exId].forEach((set, i) => {
-    const tr = document.createElement('tr');
-    tr.className = `set-row${set.completed?' completed':''}`;
-    tr.id = `setrow-${exId}-${i}`;
-    const isPlank = exId==='plank';
-    tr.innerHTML = `
-      <td><span class="set-num">${i+1}</span></td>
+  const tbody=document.getElementById(`setrows-${exId}`);
+  const isPlank=exId==='plank';
+  tbody.innerHTML='';
+  exSets[exId].forEach((set,i)=>{
+    const tr=document.createElement('tr'); tr.className=`set-row${set.completed?' completed':''}`; tr.id=`setrow-${exId}-${i}`;
+    tr.innerHTML=`<td><span class="set-num">${i+1}</span></td>
       <td><input class="set-input" type="number" value="${set.reps}" min="1" id="reps-${exId}-${i}" onchange="updateSet('${exId}',${i},'reps',this.value)"></td>
       ${!isPlank?`<td><input class="set-input" type="number" value="${set.weight||''}" min="0" placeholder="lbs" id="weight-${exId}-${i}" onchange="updateSet('${exId}',${i},'weight',this.value)"></td>`:''}
       <td><button class="set-done-btn${set.completed?' completed':''}" id="setbtn-${exId}-${i}" onclick="completeSet('${exId}',${i})">
         ${set.completed?'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" style="width:14px;height:14px"><path d="M20 6L9 17l-5-5"/></svg>':''}
-      </button></td>
-    `;
+      </button></td>`;
     tbody.appendChild(tr);
   });
 }
 
 function toggleExCard(exId) {
-  const body = document.getElementById(`exbody-${exId}`);
-  const arrow = document.getElementById(`exarrow-${exId}`);
-  const open = body.style.display==='none';
-  body.style.display = open?'block':'none';
-  arrow.style.transform = open?'rotate(180deg)':'rotate(0deg)';
+  const body=document.getElementById(`exbody-${exId}`), arrow=document.getElementById(`exarrow-${exId}`);
+  const open=body.style.display==='none';
+  body.style.display=open?'block':'none';
+  arrow.style.transform=open?'rotate(180deg)':'rotate(0deg)';
 }
 
-function updateSet(exId, i, field, val) {
-  exSets[exId][i][field] = field==='weight'?parseFloat(val):parseInt(val);
-}
+function updateSet(exId,i,field,val) { exSets[exId][i][field]=field==='weight'?parseFloat(val):parseInt(val); }
 
-function completeSet(exId, i) {
-  exSets[exId][i].completed = !exSets[exId][i].completed;
-  // Check if all sets done
-  const allDone = exSets[exId].every(s=>s.completed);
-  const card = document.getElementById(`excard-${exId}`);
-  const status = document.getElementById(`exstatus-${exId}`);
-  if (allDone) { card.classList.add('done-ex'); status.textContent='✅'; }
-  else { card.classList.remove('done-ex'); status.textContent='○'; }
+function completeSet(exId,i) {
+  exSets[exId][i].completed=!exSets[exId][i].completed;
+  const allDone=exSets[exId].every(s=>s.completed);
+  document.getElementById(`excard-${exId}`).classList.toggle('done-ex',allDone);
+  document.getElementById(`exstatus-${exId}`).textContent=allDone?'✅':'○';
   renderSetRows(exId);
-  // Start rest timer
-  startRestTimer(90);
+  if (exSets[exId][i].completed) {
+    startRestTimer(90);
+    spawnCoins(document.getElementById(`setbtn-${exId}-${i}`));
+  }
 }
 
 function addSet(exId) {
-  const last = exSets[exId][exSets[exId].length-1];
-  exSets[exId].push({...last, completed:false});
+  const last=exSets[exId][exSets[exId].length-1];
+  exSets[exId].push({...last,completed:false});
   renderSetRows(exId);
 }
 
 // REST TIMER
-function startRestTimer(seconds) {
-  stopTimer();
-  timerSeconds = seconds;
+function startRestTimer(s) {
+  stopTimer(); timerSeconds=s;
   document.getElementById('rest-timer').classList.add('active');
   updateTimerDisplay();
-  timerInterval = setInterval(() => {
-    timerSeconds--;
-    updateTimerDisplay();
-    if (timerSeconds<=0) { stopTimer(); document.getElementById('timer-display').textContent='Go! 💪'; }
-  }, 1000);
+  timerInterval=setInterval(()=>{ timerSeconds--; updateTimerDisplay(); if(timerSeconds<=0){stopTimer();document.getElementById('timer-display').textContent='Go! 💪';} },1000);
 }
-
-function setRestTimer(s) { startRestTimer(s); }
-function stopTimer() { if(timerInterval){clearInterval(timerInterval);timerInterval=null;} document.getElementById('rest-timer').classList.remove('active'); }
-function updateTimerDisplay() {
-  const m = Math.floor(timerSeconds/60), s = timerSeconds%60;
-  document.getElementById('timer-display').textContent = `${m}:${String(s).padStart(2,'0')}`;
+function setRestTimer(s){startRestTimer(s);}
+function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;}document.getElementById('rest-timer').classList.remove('active');}
+function updateTimerDisplay(){const m=Math.floor(timerSeconds/60),s=timerSeconds%60;document.getElementById('timer-display').textContent=`${m}:${String(s).padStart(2,'0')}`;}
+function selectCardioMachine(btn,name){
+  selectedCardioMachine=name;
+  document.querySelectorAll('#cardio-machine-btns button').forEach(b=>{b.style.borderColor='var(--border)';b.style.color='var(--muted)';b.style.background='transparent';});
+  btn.style.borderColor='var(--gold)';btn.style.color='var(--gold)';btn.style.background='rgba(255,215,0,0.1)';
 }
-
-function selectCardioMachine(btn, name) {
-  selectedCardioMachine = name;
-  document.querySelectorAll('#cardio-machine-btns button').forEach(b => {
-    b.style.borderColor='var(--border)'; b.style.color='var(--muted)'; b.style.background='transparent';
-  });
-  btn.style.borderColor='var(--blue)'; btn.style.color='var(--blue)'; btn.style.background='rgba(14,165,233,0.15)';
+function setLogType(type){
+  currentLogType=type;
+  ['cardio','strength','active','rest'].forEach(t=>{document.getElementById(`form-${t}`).style.display=t===type?'block':'none';document.getElementById(`tab-${t}`).classList.toggle('active',t===type);});
 }
+function selectZone(zone,btn){selectedZone=zone;document.querySelectorAll('.zone-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
+function selectFeel(btn,feel){selectedFeel=feel;btn.parentElement.querySelectorAll('.feel-btn').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected');}
 
-function setLogType(type) {
-  currentLogType = type;
-  ['cardio','strength','active','rest'].forEach(t => {
-    document.getElementById(`form-${t}`).style.display = t===type?'block':'none';
-    document.getElementById(`tab-${t}`).classList.toggle('active', t===type);
-  });
-}
-
-function selectZone(zone, btn) {
-  selectedZone = zone;
-  document.querySelectorAll('.zone-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-}
-
-function selectFeel(btn, feel) {
-  selectedFeel = feel;
-  btn.parentElement.querySelectorAll('.feel-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-}
-
-async function submitLog() {
-  const date = document.getElementById('log-date').value;
-  let log = {type:currentLogType};
-  if (currentLogType==='cardio') {
-    log.minutes = parseInt(document.getElementById('cardio-slider').value);
-    log.zone = selectedZone; log.feel = selectedFeel;
-    log.machine = selectedCardioMachine;
-    log.notes = document.getElementById('cardio-notes').value;
-  } else if (currentLogType==='strength') {
-    log.feel = selectedFeel;
-    log.notes = document.getElementById('strength-notes').value;
-    log.exercises = {};
-    EXERCISES.forEach(ex => {
-      const completedSets = exSets[ex.id].filter(s=>s.completed);
-      if (completedSets.length > 0) {
-        log.exercises[ex.id] = {sets: completedSets.map(s=>({reps:s.reps,weight:s.weight,unit:s.unit}))};
-      }
+async function submitLog(){
+  const date=document.getElementById('log-date').value;
+  let log={type:currentLogType};
+  if(currentLogType==='cardio'){
+    log.minutes=parseInt(document.getElementById('cardio-slider').value);
+    log.zone=selectedZone;log.feel=selectedFeel;log.machine=selectedCardioMachine;
+    log.notes=document.getElementById('cardio-notes').value;
+  } else if(currentLogType==='strength'){
+    log.feel=selectedFeel;log.notes=document.getElementById('strength-notes').value;log.exercises={};
+    EXERCISES.forEach(ex=>{
+      const done=exSets[ex.id].filter(s=>s.completed);
+      if(done.length>0)log.exercises[ex.id]={sets:done.map(s=>({reps:s.reps,weight:s.weight,unit:s.unit}))};
     });
   }
-  await saveLog(date, log);
+  await saveLog(date,log);
 }
+async function logActiveRest(walked){await saveLog(document.getElementById('log-date').value,{type:'active',walked});}
+async function logRest(){await saveLog(document.getElementById('log-date').value,{type:'rest'});}
 
-async function logActiveRest(walked) { await saveLog(document.getElementById('log-date').value, {type:'active',walked}); }
-async function logRest() { await saveLog(document.getElementById('log-date').value, {type:'rest'}); }
-
-async function saveLog(date, log) {
-  try {
-    const res = await fetch('/api/log', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log})});
-    const result = await res.json();
-    if (result.success) {
+async function saveLog(date,log){
+  try{
+    const res=await fetch('/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log})});
+    const result=await res.json();
+    if(result.success){
+      const prevStreak=(appData.stats||{}).currentStreak||0;
       await loadData();
       stopTimer();
-      showSuccess(log, result.stats);
-      renderHome(); renderCalendar(); renderProgress();
+      showSuccess(log,result.stats,prevStreak);
+      renderHome();renderCalendar();renderProgress();
     }
-  } catch(e) { alert('Error saving. Are you connected?'); }
+  }catch(e){alert('Error saving. Are you connected?');}
 }
 
-async function logBodyWeight() {
-  const val = document.getElementById('bw-input').value;
-  if (!val) return;
+async function logBodyWeight(){
+  const val=document.getElementById('bw-input').value; if(!val)return;
   await fetch('/api/bodyweight',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:getToday(),weight:val})});
-  await loadData();
-  renderProgress();
+  await loadData(); renderProgress();
 }
 
-function showSuccess(log, stats) {
-  let icon='💪', title='Workout Logged!', sub='';
-  if (log.type==='cardio') {
-    icon='🚴'; title=`${log.minutes} Minutes Done!`;
-    sub = log.zone==='zone2'?'Zone 2 cardio — great for your heart ❤️':'You pushed hard today! 🔥';
-    if (log.machine) sub += ` (${log.machine})`;
-  } else if (log.type==='strength') {
-    const count = Object.keys(log.exercises||{}).length;
-    icon='💪'; title='Strength Session Done!';
-    sub = `${count} exercises completed. Building that foundation. 💪`;
-  } else if (log.type==='active') {
-    icon='🐕'; title='Walk Logged!'; sub='Every step counts.';
-  } else {
-    icon='😴'; title='Rest Day Logged'; sub='Recovery is part of the plan.';
-  }
-  if (stats.currentStreak>1) sub+=` 🔥 ${stats.currentStreak}-day streak!`;
+function showSuccess(log,stats,prevStreak){
+  let icon='💪',title='Workout Logged!',sub='';
+  if(log.type==='cardio'){icon='🚴';title=`${log.minutes} Minutes Done!`;sub=log.zone==='zone2'?'Zone 2 cardio — great for your heart ❤️':'You pushed hard today! 🔥';if(log.machine)sub+=` (${log.machine})`;}
+  else if(log.type==='strength'){const count=Object.keys(log.exercises||{}).length;icon='💪';title='Strength Session Done!';sub=`${count} exercises completed. Building that foundation.`;}
+  else if(log.type==='active'){icon='🐕';title='Walk Logged!';sub='Every step counts.';}
+  else{icon='😴';title='Rest Day Logged';sub='Recovery is part of the plan.';}
+
+  const streak=stats.currentStreak;
+  const streakEl=document.getElementById('overlay-streak');
+  if(streak>1){streakEl.textContent=`🔥 ${streak} day streak!`;streakEl.style.display='block';}
+  else{streakEl.style.display='none';}
+
   document.getElementById('overlay-icon').textContent=icon;
   document.getElementById('overlay-title').textContent=title;
   document.getElementById('overlay-sub').textContent=sub;
   document.getElementById('success-overlay').classList.add('show');
-  launchConfetti();
-}
+  launchCelebration();
 
-function closeOverlay() { document.getElementById('success-overlay').classList.remove('show'); }
-
-function launchConfetti() {
-  const colors=['#0ea5e9','#10b981','#f59e0b','#8b5cf6','#ef4444'];
-  for (let i=0;i<40;i++) {
-    setTimeout(()=>{
-      const el=document.createElement('div'); el.className='confetti-piece';
-      el.style.cssText=`left:${Math.random()*100}vw;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()}s;animation-delay:${Math.random()*0.5}s;`;
-      document.body.appendChild(el); setTimeout(()=>el.remove(),3000);
-    },i*30);
+  // Check for new spin triggers
+  const spins = appData.spinsAvailable||{};
+  if(Object.keys(spins).some(k=>spins[k])){
+    setTimeout(()=>{closeOverlay();checkPendingSpins();},2500);
   }
 }
+function closeOverlay(){document.getElementById('success-overlay').classList.remove('show');}
 
 // CALENDAR
-function getDayIcon(dow, log) {
-  if (dow === 0) return '😴';
-  if (dow === 6) return '🐕';
-  if (log) {
-    if (log.type==='cardio') return '🚴';
-    if (log.type==='strength') return '💪';
-    if (log.type==='active') return '🐕';
-    if (log.type==='rest') return '😴';
-  }
-  // Scheduled type
-  const schedule = WORKOUT_SCHEDULE[dow];
-  if (schedule.type==='cardio') return '🚴';
-  if (schedule.type==='strength') return '💪';
-  return '😴';
+function getDayIcon(dow,log){
+  if(dow===0)return'😴';if(dow===6)return'🐕';
+  if(log){if(log.type==='cardio')return'🚴';if(log.type==='strength')return'💪';if(log.type==='active')return'🐕';if(log.type==='rest'||log.type==='cheat')return'😴';}
+  return WORKOUT_SCHEDULE[dow].type==='cardio'?'🚴':WORKOUT_SCHEDULE[dow].type==='strength'?'💪':'😴';
 }
-
-function renderCalendar() {
+function renderCalendar(){
   const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
   document.getElementById('cal-title').textContent=`${months[calMonth]} ${calYear}`;
-  const grid=document.getElementById('cal-grid'); grid.innerHTML='';
+  const grid=document.getElementById('cal-grid');grid.innerHTML='';
   ['M','T','W','T','F','S','S'].forEach(d=>{const el=document.createElement('div');el.className='cal-day-label';el.textContent=d;grid.appendChild(el);});
   const firstDay=new Date(calYear,calMonth,1).getDay();
   const offset=firstDay===0?6:firstDay-1;
@@ -891,10 +1012,11 @@ function renderCalendar() {
   for(let i=0;i<offset;i++){const el=document.createElement('div');el.className='cal-day empty';grid.appendChild(el);}
   for(let day=1;day<=daysInMonth;day++){
     const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
-    const dow=new Date(ds).getDay(), isRest=dow===0, isFuture=ds>today, log=appData.logs[ds], isToday=ds===today;
-    let cls=isFuture?'future':isRest?'rest':log?'done':'missed';
+    const dow=new Date(ds).getDay(),isFuture=ds>today,log=appData.logs[ds],isToday=ds===today;
+    let cls=isFuture?'future':dow===0?'rest':log?'done':'missed';
     if(dow===6&&!log&&!isFuture)cls='rest';
-    const icon = getDayIcon(dow, log);
+    if(log&&log.type==='cheat')cls='done';
+    const icon=getDayIcon(dow,log);
     const el=document.createElement('div');
     el.className=`cal-day ${cls}${isToday?' today':''}`;
     el.innerHTML=`<span class="cal-day-num">${day}</span><span class="cal-day-icon">${icon}</span>`;
@@ -902,99 +1024,87 @@ function renderCalendar() {
     grid.appendChild(el);
   }
 }
-
-function showDayDetail(ds, log, cls) {
-  const detail=document.getElementById('day-detail'); detail.style.display='block';
+function showDayDetail(ds,log,cls){
+  const detail=document.getElementById('day-detail');detail.style.display='block';
   if(!log){detail.innerHTML=`<div class="log-detail"><h4>${ds}</h4><p>${cls==='rest'?'😴 Rest day':cls==='future'?'📅 Future':'❌ Not logged'}</p></div>`;return;}
   let c=`<div class="log-detail"><h4>📋 ${ds}</h4>`;
-  if(log.type==='cardio'){
-    c+=`<p><strong>Type:</strong> ${log.machine||'Cardio'}</p><p><strong>Duration:</strong> ${log.minutes} min</p><p><strong>Zone:</strong> ${log.zone==='zone2'?'✅ Zone 2':'🔥 Zone 3+'}</p><p><strong>Felt:</strong> ${log.feel}</p>`;
-  } else if(log.type==='strength'){
-    c+=`<p><strong>Type:</strong> 💪 Strength Training</p>`;
-    const exs=Object.keys(log.exercises||{});
-    if(exs.length){
-      exs.forEach(id=>{
-        const ex=EXERCISES.find(e=>e.id===id);
-        const sets=log.exercises[id].sets||[];
-        const label=sets.map(s=>s.unit==='sec'?`${s.reps}s`:`${s.reps}×${s.weight}lbs`).join(', ');
-        c+=`<p><strong>${ex?.name||id}:</strong> ${label}</p>`;
-      });
-    }
-    c+=`<p><strong>Felt:</strong> ${log.feel}</p>`;
-  } else if(log.type==='active') c+=`<p><strong>Type:</strong> 🐕 Dog Walk — ${log.walked?'✅ Done':'❌ Skipped'}</p>`;
+  if(log.type==='cardio')c+=`<p><strong>Type:</strong> ${log.machine||'Cardio'}</p><p><strong>Duration:</strong> ${log.minutes} min</p><p><strong>Zone:</strong> ${log.zone==='zone2'?'✅ Zone 2':'🔥 Zone 3+'}</p><p><strong>Felt:</strong> ${log.feel}</p>`;
+  else if(log.type==='strength'){c+=`<p><strong>Type:</strong> 💪 Strength Training</p>`;Object.keys(log.exercises||{}).forEach(id=>{const ex=EXERCISES.find(e=>e.id===id);const sets=(log.exercises[id].sets||[]).map(s=>s.unit==='sec'?`${s.reps}s`:`${s.reps}×${s.weight}lbs`).join(', ');c+=`<p><strong>${ex?.name||id}:</strong> ${sets}</p>`;});}
+  else if(log.type==='active')c+=`<p><strong>Type:</strong> 🐕 Dog Walk — ${log.walked?'✅ Done':'❌ Skipped'}</p>`;
+  else if(log.type==='cheat')c+=`<p><strong>Type:</strong> 🎲 Cheat Day (banked reward cashed in)</p>`;
   else c+=`<p><strong>Type:</strong> 😴 Rest Day</p>`;
-  if(log.notes) c+=`<p><strong>Notes:</strong> ${log.notes}</p>`;
-  c+=`</div>`; detail.innerHTML=c;
+  if(log.notes)c+=`<p><strong>Notes:</strong> ${log.notes}</p>`;
+  c+=`</div>`;detail.innerHTML=c;
 }
-
-function changeMonth(dir) {
-  calMonth+=dir;
-  if(calMonth>11){calMonth=0;calYear++;}
-  if(calMonth<0){calMonth=11;calYear--;}
-  renderCalendar();
-}
+function changeMonth(dir){calMonth+=dir;if(calMonth>11){calMonth=0;calYear++;}if(calMonth<0){calMonth=11;calYear--;}renderCalendar();}
 
 // PROGRESS
-function renderProgress() {
+function renderProgress(){
   const stats=appData.stats;
   document.getElementById('prog-days-left').textContent=stats.daysUntilGoal?.toLocaleString()||'—';
   document.getElementById('prog-total').textContent=stats.totalWorkouts;
   document.getElementById('prog-cardio-min').textContent=stats.totalCardioMinutes;
   document.getElementById('prog-longest').textContent=stats.longestStreak;
   document.getElementById('prog-volume').textContent=(stats.totalVolume||0).toLocaleString();
-
   const pct=stats.workoutGoalProgress||0;
   document.getElementById('prog-goal-bar').style.width=pct+'%';
   document.getElementById('prog-workouts-done').textContent=`${stats.totalWorkouts} / 500 workouts`;
   document.getElementById('prog-pct').textContent=pct+'%';
   document.getElementById('prog-workouts-left').textContent=`${stats.workoutsToGoal} workouts to go`;
-
   // PRs
-  const prList=document.getElementById('pr-list');
-  const prs=appData.prs||{};
-  const prKeys=Object.keys(prs);
-  if(prKeys.length===0){prList.innerHTML='<p style="color:var(--muted);font-size:14px;">No PRs yet — log your first strength session!</p>';}
-  else{
-    prList.innerHTML='';
-    prKeys.forEach(id=>{
-      const pr=prs[id]; const ex=EXERCISES.find(e=>e.id===id);
-      const row=document.createElement('div'); row.className='pr-row';
-      row.innerHTML=`<div><div class="pr-name">${ex?.name||id}</div><div class="pr-date">${pr.date}</div></div><div class="pr-val">${pr.weight} lbs × ${pr.reps} reps</div>`;
-      prList.appendChild(row);
-    });
-  }
-
+  const prList=document.getElementById('pr-list'),prs=appData.prs||{},prKeys=Object.keys(prs);
+  if(!prKeys.length){prList.innerHTML='<p style="color:var(--muted);font-size:14px;">No PRs yet — log your first strength session!</p>';}
+  else{prList.innerHTML='';prKeys.forEach(id=>{const pr=prs[id],ex=EXERCISES.find(e=>e.id===id),row=document.createElement('div');row.className='pr-row';row.innerHTML=`<div><div class="pr-name">${ex?.name||id}</div><div class="pr-date">${pr.date}</div></div><div class="pr-val">${pr.weight} lbs × ${pr.reps} reps</div>`;prList.appendChild(row);});}
   // Body weight
-  const bw=appData.bodyWeight||{};
-  const bwDates=Object.keys(bw).sort();
-  if(bwDates.length>0){
-    const latest=bwDates[bwDates.length-1];
-    document.getElementById('bw-display').textContent=`Last logged: ${bw[latest]} lbs on ${latest}`;
-  }
-
+  const bw=appData.bodyWeight||{},bwDates=Object.keys(bw).sort();
+  if(bwDates.length>0){const latest=bwDates[bwDates.length-1];document.getElementById('bw-display').textContent=`Last logged: ${bw[latest]} lbs on ${latest}`;}
+  // Cheat history
+  const chList=document.getElementById('cheat-history-list'),history=appData.cheatHistory||[];
+  if(!history.length){chList.innerHTML='<p style="color:var(--muted);font-size:14px;">No cheat days used yet — earn some by spinning! 🎰</p>';}
+  else{chList.innerHTML='';history.slice(-5).reverse().forEach(h=>{const item=document.createElement('div');item.className='cheat-history-item';item.innerHTML=`<span>${h.date}</span><span style="color:var(--gold);font-weight:700;">${h.type==='earned'?'🎰 +'+h.amount+' earned':'🎲 Used'}</span>`;chList.appendChild(item);});}
   // Milestones
-  const list=document.getElementById('milestones-list'); list.innerHTML='';
-  MILESTONES.forEach(m=>{
-    const achieved=m.key==='placeholder'?false:(appData.stats.milestones?.[m.key]||false);
-    const item=document.createElement('div'); item.className=`milestone-item${achieved?'':' locked'}`;
-    item.innerHTML=`<div class="milestone-icon">${m.icon}</div><div class="milestone-info"><div class="milestone-name">${m.name}</div><div class="milestone-desc">${m.desc}</div></div><div class="milestone-check">${achieved?'✅':'🔒'}</div>`;
-    list.appendChild(item);
-  });
+  const list=document.getElementById('milestones-list');list.innerHTML='';
+  MILESTONES.forEach(m=>{const achieved=m.key==='placeholder'?false:(appData.stats.milestones?.[m.key]||false);const item=document.createElement('div');item.className=`milestone-item${achieved?'':' locked'}`;item.innerHTML=`<div class="milestone-icon">${m.icon}</div><div class="milestone-info"><div class="milestone-name">${m.name}</div><div class="milestone-desc">${m.desc}</div></div><div>${achieved?'✅':'🔒'}</div>`;list.appendChild(item);});
 }
 
-function showPage(name,btn) {
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById(`page-${name}`).classList.add('active');
-  btn.classList.add('active');
+// ANIMATIONS
+function launchCelebration(){
+  const colors=['#ffd700','#10b981','#0ea5e9','#8b5cf6','#ef4444','#ff6b9d'];
+  for(let i=0;i<50;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');el.className='particle';
+      const size=Math.random()*8+4;
+      el.style.cssText=`left:${Math.random()*100}vw;top:-10px;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*1.5}s;animation-delay:0s;border-radius:${Math.random()>0.5?'50%':'2px'};`;
+      document.body.appendChild(el);setTimeout(()=>el.remove(),3500);
+    },i*40);
+  }
+}
+function launchCoins(count){
+  for(let i=0;i<count;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div');el.className='coin';
+      el.style.cssText=`left:${20+Math.random()*60}vw;top:${30+Math.random()*40}vh;animation-duration:${0.8+Math.random()*0.6}s;`;
+      el.textContent=['💰','🪙','⭐','✨'][Math.floor(Math.random()*4)];
+      document.body.appendChild(el);setTimeout(()=>el.remove(),2000);
+    },i*60);
+  }
+}
+function spawnCoins(el){
+  if(!el)return;
+  const rect=el.getBoundingClientRect();
+  for(let i=0;i<5;i++){
+    setTimeout(()=>{
+      const coin=document.createElement('div');coin.className='coin';
+      coin.style.cssText=`left:${rect.left+rect.width/2+Math.random()*30-15}px;top:${rect.top}px;position:fixed;animation-duration:0.8s;`;
+      coin.textContent='💰';document.body.appendChild(coin);setTimeout(()=>coin.remove(),1500);
+    },i*80);
+  }
 }
 
-function goToLog() {
-  const logBtn=document.querySelectorAll('.nav-btn')[1];
-  showPage('log',logBtn); renderLog();
-}
-
-function getToday() { return new Date().toISOString().split('T')[0]; }
+// NAV
+function showPage(name,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById(`page-${name}`).classList.add('active');btn.classList.add('active');}
+function goToLog(){const logBtn=document.querySelectorAll('.nav-btn')[1];showPage('log',logBtn);renderLog();}
+function getToday(){return new Date().toISOString().split('T')[0];}
 
 init();
 </script>
