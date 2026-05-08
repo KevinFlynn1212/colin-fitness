@@ -125,6 +125,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 .cal-day.missed { background:rgba(239,68,68,0.15); color:var(--red); }
 .cal-day.today { outline:2px solid var(--blue); }
 .cal-day.future { background:var(--card2); color:var(--muted); opacity:0.5; }
+.cal-day { flex-direction:column; gap:1px; }
+.cal-day-num { font-size:12px; font-weight:700; line-height:1; }
+.cal-day-icon { font-size:11px; line-height:1; }
 .log-detail { background:var(--card2); border:1px solid var(--border); border-radius:14px; padding:14px; margin-top:12px; }
 .log-detail h4 { font-size:15px; font-weight:700; margin-bottom:8px; }
 .log-detail p { font-size:13px; color:var(--muted); margin-bottom:4px; }
@@ -234,7 +237,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 
   <div class="date-selector">
     <label>Date</label>
-    <input type="date" id="log-date">
+    <input type="date" id="log-date" onchange="updateLogDateLabel()">
+    <span id="log-date-type" style="font-size:13px;font-weight:700;color:var(--blue);"></span>
   </div>
 
   <div class="type-tabs">
@@ -618,11 +622,20 @@ function renderHome() {
 }
 
 // LOG
+function updateLogDateLabel() {
+  const val = document.getElementById('log-date').value;
+  if (!val) return;
+  const dow = new Date(val + 'T12:00:00').getDay();
+  const schedule = WORKOUT_SCHEDULE[dow];
+  const icons = {cardio:'🚴 Cardio Day', strength:'💪 Strength Day', active:'🐕 Walk Day', rest:'😴 Rest Day'};
+  document.getElementById('log-date-type').textContent = icons[schedule.type] || '';
+  setLogType(schedule.type);
+}
+
 function renderLog() {
   document.getElementById('log-date').value = getToday();
   buildExerciseCards();
-  const dow = new Date().getDay();
-  setLogType(WORKOUT_SCHEDULE[dow].type);
+  updateLogDateLabel();
 }
 
 function buildExerciseCards() {
@@ -850,6 +863,22 @@ function launchConfetti() {
 }
 
 // CALENDAR
+function getDayIcon(dow, log) {
+  if (dow === 0) return '😴';
+  if (dow === 6) return '🐕';
+  if (log) {
+    if (log.type==='cardio') return '🚴';
+    if (log.type==='strength') return '💪';
+    if (log.type==='active') return '🐕';
+    if (log.type==='rest') return '😴';
+  }
+  // Scheduled type
+  const schedule = WORKOUT_SCHEDULE[dow];
+  if (schedule.type==='cardio') return '🚴';
+  if (schedule.type==='strength') return '💪';
+  return '😴';
+}
+
 function renderCalendar() {
   const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
   document.getElementById('cal-title').textContent=`${months[calMonth]} ${calYear}`;
@@ -865,9 +894,10 @@ function renderCalendar() {
     const dow=new Date(ds).getDay(), isRest=dow===0, isFuture=ds>today, log=appData.logs[ds], isToday=ds===today;
     let cls=isFuture?'future':isRest?'rest':log?'done':'missed';
     if(dow===6&&!log&&!isFuture)cls='rest';
+    const icon = getDayIcon(dow, log);
     const el=document.createElement('div');
     el.className=`cal-day ${cls}${isToday?' today':''}`;
-    el.textContent=day;
+    el.innerHTML=`<span class="cal-day-num">${day}</span><span class="cal-day-icon">${icon}</span>`;
     el.onclick=()=>showDayDetail(ds,log,cls);
     grid.appendChild(el);
   }
