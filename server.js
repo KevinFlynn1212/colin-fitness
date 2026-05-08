@@ -17,7 +17,7 @@ function loadData() {
 
 function getDefaultData() {
   return {
-    startDate: '2026-05-08', goal: 'Best Shape by 60', goalDate: '2031-10-18',
+    startDate: '2026-05-08', goal: 'Best Bove 60', goalDate: '2031-10-18',
     workoutGoal: 500, logs: {}, prs: {}, bodyWeight: {},
     milestones: {
       firstWorkout: false, streak7: false, workouts30: false, cardio500min: false,
@@ -195,4 +195,4 @@ app.post('/api/bodyweight', (req, res) => {
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
-app.listen(PORT, () => console.log(`🏋️ Best Shape by 60 running on port ${PORT}`));
+app.listen(PORT, () => console.log(`🏋️ Best Bove 60 running on port ${PORT}`));
