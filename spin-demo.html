@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎰 Spin Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Righteous&family=Inter:wght@600;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root { --gold:#ffd700; --amber:#f59e0b; --green:#10b981; --blue:#0ea5e9; --purple:#8b5cf6; --red:#ef4444; --rose:#ff6b9d; }
+body { background:#0a0f1e; color:#f1f5f9; font-family:'Inter',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
+h1 { font-family:'Righteous',sans-serif; font-size:28px; background:linear-gradient(135deg,var(--gold),var(--amber)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:6px; text-align:center; }
+.sub { color:#64748b; font-size:14px; margin-bottom:24px; text-align:center; }
+.wheel-wrap { position:relative; width:300px; height:300px; margin-bottom:24px; }
+.pointer { position:absolute; top:-16px; left:50%; transform:translateX(-50%); font-size:28px; z-index:10; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
+#wheel { width:300px; height:300px; border-radius:50%; border:4px solid var(--gold); box-shadow:0 0 40px rgba(255,215,0,0.4); display:block; }
+.btn-spin { background:linear-gradient(135deg,var(--gold),var(--amber)); color:#000; border:none; font-family:'Righteous',sans-serif; font-size:22px; padding:16px 52px; border-radius:16px; cursor:pointer; box-shadow:0 4px 24px rgba(255,215,0,0.4); transition:all 0.15s; margin-bottom:16px; }
+.btn-spin:hover { transform:scale(1.06); }
+.btn-spin:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+.result { text-align:center; display:none; animation:popIn 0.4s ease; }
+.result.show { display:block; }
+.result-icon { font-size:60px; margin-bottom:8px; }
+.result-title { font-family:'Righteous',sans-serif; font-size:26px; color:var(--gold); margin-bottom:6px; }
+.result-desc { font-size:15px; color:#64748b; margin-bottom:16px; }
+.btn-again { background:rgba(255,215,0,0.15); color:var(--gold); border:1.5px solid var(--gold); font-family:'Righteous',sans-serif; font-size:16px; padding:10px 28px; border-radius:12px; cursor:pointer; }
+@keyframes popIn { from{transform:scale(0.7);opacity:0} to{transform:scale(1);opacity:1} }
+.tier-btns { display:flex; gap:10px; margin-bottom:20px; }
+.tier-btn { padding:8px 16px; border-radius:10px; border:1.5px solid #1e2d45; background:transparent; color:#64748b; font-family:'Inter',sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:all 0.15s; }
+.tier-btn.active { border-color:var(--gold); background:rgba(255,215,0,0.1); color:var(--gold); }
+.particle { position:fixed; pointer-events:none; z-index:400; animation:fall linear forwards; border-radius:2px; }
+@keyframes fall { 0%{transform:translateY(-10px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+.coin { position:fixed; pointer-events:none; z-index:400; font-size:24px; animation:coinFloat ease-out forwards; }
+@keyframes coinFloat { 0%{transform:translateY(0) scale(1);opacity:1} 100%{transform:translateY(-140px) scale(0.5);opacity:0} }
+@keyframes flashFade { 0%{opacity:1} 100%{opacity:0} }
+</style>
+</head>
+<body>
+<h1>🎰 Best Bove 60</h1>
+<p class="sub">Spin Wheel Demo — see all 3 tiers!</p>
+
+<div class="tier-btns">
+  <button class="tier-btn active" onclick="setTier('small',this)">🎲 Small</button>
+  <button class="tier-btn" onclick="setTier('medium',this)">🎰 Medium</button>
+  <button class="tier-btn" onclick="setTier('jackpot',this)">💰 Jackpot</button>
+</div>
+
+<div class="wheel-wrap">
+  <div class="pointer">▼</div>
+  <canvas id="wheel" width="300" height="300"></canvas>
+</div>
+
+<button class="btn-spin" id="btn-spin" onclick="doSpin()">SPIN! 🎰</button>
+
+<div class="result" id="result">
+  <div class="result-icon" id="r-icon">🎉</div>
+  <div class="result-title" id="r-title">Winner!</div>
+  <div class="result-desc" id="r-desc"></div>
+  <button class="btn-again" onclick="resetSpin()">Spin Again 🎰</button>
+  <button class="btn-again" onclick="testWorkoutCelebration()" style="margin-left:10px;background:rgba(16,185,129,0.15);color:#10b981;border-color:#10b981;">Test Workout 💪</button>
+</div>
+
+<script>
+let currentTier = 'small', spinAngle = 0, spinning = false;
+
+const PRIZES = {
+  small:[
+    {label:'1 Cheat Day',icon:'🎲',desc:'Bank 1 cheat day — use it anytime!'},
+    {label:'Skip Cardio',icon:'🏖️',desc:'Skip your next cardio session guilt-free!'},
+    {label:'1 Cheat Day',icon:'🎲',desc:'Bank 1 cheat day — use it anytime!'},
+    {label:'Light Week',icon:'😌',desc:'Cut reps/weight in half for one week!'},
+    {label:'1 Cheat Day',icon:'🎲',desc:'Bank 1 cheat day — use it anytime!'},
+    {label:'Extra Rest',icon:'😴',desc:'Bank a free rest day this week!'},
+  ],
+  medium:[
+    {label:'2 Cheat Days',icon:'🎰',desc:'Bank 2 cheat days — you earned it!'},
+    {label:'Skip Cardio',icon:'🏖️',desc:'Skip your next cardio session guilt-free!'},
+    {label:'2 Cheat Days',icon:'🎰',desc:'Bank 2 cheat days — you earned it!'},
+    {label:'1 Cheat Day',icon:'🎲',desc:'Bank 1 cheat day!'},
+    {label:'Light Week',icon:'😌',desc:'Half intensity week — well deserved!'},
+    {label:'2 Cheat Days',icon:'🎰',desc:'Bank 2 cheat days — you earned it!'},
+  ],
+  jackpot:[
+    {label:'JACKPOT! 5 Days',icon:'💰',desc:'JACKPOT! 5 cheat days banked!'},
+    {label:'3 Cheat Days',icon:'🏆',desc:'3 cheat days — legendary!'},
+    {label:'3 Cheat Days',icon:'🏆',desc:'3 cheat days — legendary!'},
+    {label:'Full Rest Week',icon:'🌴',desc:'Take a full recovery week — you\'ve earned it!'},
+    {label:'3 Cheat Days',icon:'🏆',desc:'3 cheat days — legendary!'},
+    {label:'JACKPOT! 5 Days',icon:'💰',desc:'JACKPOT! 5 cheat days banked!'},
+  ],
+};
+
+const COLORS = {
+  small:['#1a3a1a','#0f2847','#1a3a1a','#0f2847','#1a3a1a','#0f2847'],
+  medium:['#1a2a00','#0f1847','#1a2a00','#0f1847','#1a2a00','#0f1847'],
+  jackpot:['#2a1a00','#1a0030','#2a1a00','#1a0030','#2a1a00','#1a0030'],
+};
+
+function setTier(tier, btn) {
+  currentTier = tier;
+  document.querySelectorAll('.tier-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  spinAngle = 0;
+  drawWheel(0);
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('btn-spin').disabled = false;
+  document.getElementById('btn-spin').style.display = 'block';
+}
+
+function drawWheel(rotation) {
+  const canvas = document.getElementById('wheel');
+  const ctx = canvas.getContext('2d');
+  const prizes = PRIZES[currentTier];
+  const colors = COLORS[currentTier];
+  const n = prizes.length, angle = (2*Math.PI)/n;
+  const cx=150, cy=150, r=146;
+  ctx.clearRect(0,0,300,300);
+  for (let i=0;i<n;i++) {
+    const start=rotation+i*angle, end=start+angle;
+    ctx.beginPath(); ctx.moveTo(cx,cy); ctx.arc(cx,cy,r,start,end); ctx.closePath();
+    ctx.fillStyle=colors[i%colors.length]; ctx.fill();
+    ctx.strokeStyle='rgba(255,215,0,0.3)'; ctx.lineWidth=1; ctx.stroke();
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(start+angle/2);
+    ctx.textAlign='right'; ctx.fillStyle='#ffd700'; ctx.font='bold 11px Inter';
+    ctx.fillText(prizes[i].label, r-6, 4);
+    ctx.font='14px Arial';
+    ctx.fillText(prizes[i].icon, r-56, 18);
+    ctx.restore();
+  }
+  ctx.beginPath(); ctx.arc(cx,cy,26,0,2*Math.PI);
+  const grad=ctx.createRadialGradient(cx,cy,0,cx,cy,26);
+  grad.addColorStop(0,'#fff8c0'); grad.addColorStop(1,'#ffd700');
+  ctx.fillStyle=grad; ctx.fill();
+  ctx.fillStyle='#000'; ctx.font='bold 11px Righteous,Inter'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('GO',cx,cy);
+}
+
+function doSpin() {
+  if (spinning) return;
+  spinning = true;
+  document.getElementById('btn-spin').disabled = true;
+  const prizes = PRIZES[currentTier];
+  const n = prizes.length, sliceAngle = (2*Math.PI)/n;
+  const prizeIdx = Math.floor(Math.random()*n);
+  const extraSpins = (6+Math.floor(Math.random()*4))*2*Math.PI;
+  const target = extraSpins + (2*Math.PI-(prizeIdx*sliceAngle+sliceAngle/2))-Math.PI/2;
+  let start=null, duration=4000, initAngle=spinAngle;
+  function animate(ts) {
+    if(!start) start=ts;
+    const elapsed=ts-start, progress=Math.min(elapsed/duration,1);
+    const ease=1-Math.pow(1-progress,4);
+    spinAngle=initAngle+(target-initAngle)*ease;
+    drawWheel(spinAngle);
+    if(progress<1){requestAnimationFrame(animate);}
+    else{spinning=false;showResult(prizes[prizeIdx]);}
+  }
+  requestAnimationFrame(animate);
+}
+
+function showResult(prize) {
+  document.getElementById('r-icon').textContent = prize.icon;
+  document.getElementById('r-title').textContent = prize.label;
+  document.getElementById('r-desc').textContent = prize.desc;
+  document.getElementById('result').classList.add('show');
+  document.getElementById('btn-spin').style.display = 'none';
+  celebrate();
+}
+
+function resetSpin() {
+  document.getElementById('result').classList.remove('show');
+  document.getElementById('btn-spin').disabled = false;
+  document.getElementById('btn-spin').style.display = 'block';
+}
+
+function celebrate() {
+  const colors=['#ffd700','#10b981','#0ea5e9','#8b5cf6','#ef4444','#ff6b9d'];
+  // Confetti particles
+  for(let i=0;i<80;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div'); el.className='particle';
+      const size=Math.random()*10+4;
+      el.style.cssText=`left:${Math.random()*100}vw;top:-10px;width:${size}px;height:${size}px;background:${colors[Math.floor(Math.random()*colors.length)]};animation-duration:${1.5+Math.random()*1.5}s;border-radius:${Math.random()>0.5?'50%':'2px'};`;
+      document.body.appendChild(el); setTimeout(()=>el.remove(),4000);
+    },i*30);
+  }
+  // Floating coins/emojis
+  for(let i=0;i<20;i++){
+    setTimeout(()=>{
+      const el=document.createElement('div'); el.className='coin';
+      el.style.cssText=`left:${10+Math.random()*80}vw;top:${30+Math.random()*40}vh;animation-duration:${0.8+Math.random()*0.8}s;`;
+      el.textContent=['💰','🪙','⭐','✨','🎰','🏆','💎','🎊'][Math.floor(Math.random()*8)];
+      document.body.appendChild(el); setTimeout(()=>el.remove(),2500);
+    },i*70);
+  }
+  // Flash overlay
+  const flash=document.createElement('div');
+  flash.style.cssText='position:fixed;inset:0;background:rgba(255,215,0,0.12);z-index:500;pointer-events:none;animation:flashFade 0.6s ease forwards;';
+  document.body.appendChild(flash); setTimeout(()=>flash.remove(),700);
+}
+
+function testWorkoutCelebration() {
+  // Show a workout logged popup
+  const overlay = document.createElement('div');
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;z-index:200;';
+  overlay.innerHTML=`
+    <div style="background:#111827;border:2px solid #ffd700;border-radius:24px;padding:32px 24px;text-align:center;max-width:300px;animation:popIn 0.3s ease;box-shadow:0 0 40px rgba(255,215,0,0.2);">
+      <div style="font-size:56px;margin-bottom:12px;">🚴</div>
+      <div style="font-family:'Righteous',sans-serif;font-size:22px;color:#ffd700;margin-bottom:8px;">30 Minutes Done!</div>
+      <div style="font-size:15px;color:#64748b;margin-bottom:8px;">Zone 2 cardio — great for your heart ❤️</div>
+      <div style="font-family:'Righteous',sans-serif;font-size:28px;color:#ff6b9d;margin-bottom:16px;">🔥 3 day streak!</div>
+      <button onclick="this.closest('div').parentElement.remove()" style="background:linear-gradient(135deg,#ffd700,#f59e0b);color:#000;border:none;font-family:'Righteous',sans-serif;font-size:16px;padding:12px 32px;border-radius:12px;cursor:pointer;width:100%;">Let's Go! 🎰</button>
+    </div>`;
+  document.body.appendChild(overlay);
+  overlay.onclick = e => { if(e.target===overlay) overlay.remove(); };
+  celebrate();
+}
+
+drawWheel(0);
+</script>
+</body>
+</html>
