@@ -212,6 +212,7 @@ app.post('/api/cashin-cheat', (req,res) => {
 });
 
 app.get('/health', (req,res) => res.json({status:'ok'}));
+app.get('/spin-demo.html', (req,res) => res.sendFile(path.join(__dirname,'spin-demo.html')));
 app.get('*', (req,res) => res.sendFile(path.join(__dirname,'index.html')));
 
 app.listen(PORT, () => console.log(`🎰 Best Bove 60 running on port ${PORT}`));
