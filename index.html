@@ -249,11 +249,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 .cheat-history-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
 .cheat-history-item:last-child { border-bottom:none; }
 
-/* FIXED REST TIMER BANNER */
-.rest-banner { position:fixed; top:0; left:0; right:0; z-index:150; background:linear-gradient(135deg,#1a0f00,#0a1528); border-bottom:3px solid var(--gold); padding:10px 16px; display:none; align-items:center; justify-content:space-between; gap:12px; box-shadow:0 4px 24px rgba(0,0,0,0.7); }
+/* INLINE REST TIMER (between exercise cards) */
+.rest-banner { background:rgba(14,165,233,0.08); border:1px solid rgba(14,165,233,0.3); border-radius:12px; padding:10px 14px; display:none; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .rest-banner.active { display:flex; }
-.rest-banner-time { font-size:40px; font-weight:900; color:var(--gold); font-family:'Righteous',sans-serif; line-height:1; }
-.rest-banner-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:2px; }
+.rest-banner-time { font-size:26px; font-weight:900; color:var(--blue); font-family:'Righteous',sans-serif; line-height:1; }
+.rest-banner-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:2px; }
 
 /* PLANK TIMER */
 .plank-start-btn { padding:5px 10px; border-radius:8px; border:1.5px solid var(--green); background:rgba(16,185,129,0.1); color:var(--green); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; }
@@ -521,13 +521,13 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
   <div class="card" id="milestones-list"></div>
 </div>
 
-<!-- FLOATING REST TIMER BANNER -->
+<!-- REST TIMER (inline between exercise cards, moved by JS) -->
 <div class="rest-banner" id="rest-banner">
   <div>
     <div class="rest-banner-label">⏱️ Rest Timer</div>
     <div class="rest-banner-time" id="rest-banner-time">1:30</div>
   </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
     <button class="btn-xs btn-outline" onclick="setRestTimer(60)">60s</button>
     <button class="btn-xs btn-outline" onclick="setRestTimer(90)">90s</button>
     <button class="btn-xs btn-outline" onclick="setRestTimer(120)">2m</button>
@@ -954,7 +954,7 @@ function completeSet(exId,i) {
   renderSetRows(exId);
   if (exSets[exId][i].completed) {
     startWorkoutTimer(); // start/keep workout elapsed timer
-    if (exId !== 'plank') startRestTimer(90);
+    if (exId !== 'plank') startRestTimer(90, exId);
     spawnCoins(document.getElementById(`setbtn-${exId}-${i}`));
   }
 }
@@ -965,19 +965,29 @@ function addSet(exId) {
   renderSetRows(exId);
 }
 
-// REST TIMER (floating banner)
-function startRestTimer(s) {
+// REST TIMER (inline between exercise cards)
+function startRestTimer(s, afterExId) {
   stopTimer(); timerSeconds=s;
   const banner = document.getElementById('rest-banner');
+  // Move banner after the exercise card that triggered it
+  if (afterExId) {
+    const card = document.getElementById('excard-' + afterExId);
+    if (card && card.parentNode) {
+      card.parentNode.insertBefore(banner, card.nextSibling);
+    }
+  }
   banner.classList.add('active');
   updateTimerDisplay();
   timerInterval=setInterval(()=>{
     timerSeconds--;
     updateTimerDisplay();
-    if(timerSeconds<=0){stopTimer();document.getElementById('rest-banner-time').textContent='Go! 💪';setTimeout(stopTimer,1200);}
+    if(timerSeconds<=0){
+      document.getElementById('rest-banner-time').textContent='Go! 💪';
+      setTimeout(stopTimer,1200);
+    }
   },1000);
 }
-function setRestTimer(s){startRestTimer(s);}
+function setRestTimer(s){startRestTimer(s, null);}
 function stopTimer(){
   if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
   document.getElementById('rest-banner').classList.remove('active');
