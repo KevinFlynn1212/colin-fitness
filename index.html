@@ -248,6 +248,22 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 /* CHEAT HISTORY */
 .cheat-history-item { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); font-size:13px; }
 .cheat-history-item:last-child { border-bottom:none; }
+
+/* FIXED REST TIMER BANNER */
+.rest-banner { position:fixed; top:0; left:0; right:0; z-index:150; background:linear-gradient(135deg,#1a0f00,#0a1528); border-bottom:3px solid var(--gold); padding:10px 16px; display:none; align-items:center; justify-content:space-between; gap:12px; box-shadow:0 4px 24px rgba(0,0,0,0.7); }
+.rest-banner.active { display:flex; }
+.rest-banner-time { font-size:40px; font-weight:900; color:var(--gold); font-family:'Righteous',sans-serif; line-height:1; }
+.rest-banner-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:2px; }
+
+/* PLANK TIMER */
+.plank-start-btn { padding:5px 10px; border-radius:8px; border:1.5px solid var(--green); background:rgba(16,185,129,0.1); color:var(--green); font-size:12px; font-weight:700; cursor:pointer; font-family:inherit; }
+.plank-start-btn:disabled { opacity:0.4; cursor:not-allowed; }
+.plank-count { display:block; font-size:14px; font-weight:900; min-height:18px; text-align:center; margin-top:2px; }
+
+/* WORKOUT TIMER BAR */
+.workout-timer-bar { background:rgba(14,165,233,0.08); border:1px solid rgba(14,165,233,0.3); border-radius:12px; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.workout-timer-elapsed { font-size:26px; font-weight:900; color:var(--blue); font-family:'Righteous',sans-serif; }
+.workout-timer-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
 </style>
 </head>
 <body>
@@ -381,8 +397,15 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 
   <!-- STRENGTH -->
   <div id="form-strength" style="display:none;">
+    <div class="workout-timer-bar">
+      <div>
+        <div class="workout-timer-label">⏱️ Workout Time</div>
+        <div class="workout-timer-elapsed" id="workout-elapsed">0:00</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);text-align:right;">Started<br><span id="workout-start-label">—</span></div>
+    </div>
     <div id="exercise-cards"></div>
-    <div class="rest-timer" id="rest-timer">
+    <div class="rest-timer" id="rest-timer" style="display:none!important;">
       <div class="timer-display" id="timer-display">1:30</div>
       <div class="timer-label">⏱️ Rest Timer</div>
       <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;">
@@ -498,6 +521,20 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
   <div class="card" id="milestones-list"></div>
 </div>
 
+<!-- FLOATING REST TIMER BANNER -->
+<div class="rest-banner" id="rest-banner">
+  <div>
+    <div class="rest-banner-label">⏱️ Rest Timer</div>
+    <div class="rest-banner-time" id="rest-banner-time">1:30</div>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button class="btn-xs btn-outline" onclick="setRestTimer(60)">60s</button>
+    <button class="btn-xs btn-outline" onclick="setRestTimer(90)">90s</button>
+    <button class="btn-xs btn-outline" onclick="setRestTimer(120)">2m</button>
+    <button class="btn-xs" style="background:var(--red);color:white;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:700;padding:5px 10px;font-size:12px;" onclick="stopTimer()">✕ Stop</button>
+  </div>
+</div>
+
 <!-- SUCCESS OVERLAY -->
 <div class="overlay" id="success-overlay" onclick="closeOverlay()">
   <div class="overlay-card">
@@ -553,6 +590,8 @@ let appData = null;
 let calYear = new Date().getFullYear(), calMonth = new Date().getMonth();
 let currentLogType = 'cardio', selectedZone = 'zone2', selectedFeel = 'good', selectedCardioMachine = '';
 let timerInterval = null, timerSeconds = 0;
+let workoutTimerInterval = null, workoutStartTime = null;
+let plankTimers = {};
 let spinAngle = 0, spinPrize = null, spinTier = 'small';
 let pendingSpinReason = '';
 
@@ -571,7 +610,7 @@ const EXERCISES = [
   {id:'cable-rows',name:'Cable Rows',machine:'Cable Row Machine (wrist straps)',targets:'Back, Biceps',prescription:'3 sets × 12 reps | Start: 40 lbs',sets:[{reps:12,weight:40,unit:'lbs'},{reps:12,weight:40,unit:'lbs'},{reps:12,weight:40,unit:'lbs'}]},
   {id:'chest-press',name:'Machine Chest Press',machine:'Chest Press Machine',targets:'Chest, Triceps, Shoulders',prescription:'3 sets × 12 reps | Start: 50 lbs',sets:[{reps:12,weight:50,unit:'lbs'},{reps:12,weight:50,unit:'lbs'},{reps:12,weight:50,unit:'lbs'}]},
   {id:'shoulder-press',name:'Machine Shoulder Press',machine:'Shoulder Press Machine',targets:'Deltoids, Triceps',prescription:'3 sets × 12 reps | Start: 30 lbs',sets:[{reps:12,weight:30,unit:'lbs'},{reps:12,weight:30,unit:'lbs'},{reps:12,weight:30,unit:'lbs'}]},
-  {id:'rdl',name:'Romanian Deadlift',machine:'Cable Machine / Dumbbells (wrist straps)',targets:'Hamstrings, Glutes, Lower Back',prescription:'3 sets × 10 reps | Start: 30 lbs',sets:[{reps:10,weight:30,unit:'lbs'},{reps:10,weight:30,unit:'lbs'},{reps:10,weight:30,unit:'lbs'}]},
+  {id:'leg-curl',name:'Seated Leg Curl',machine:'Leg Curl Machine',targets:'Hamstrings, Glutes',prescription:'3 sets × 12 reps | Start: 40 lbs',sets:[{reps:12,weight:40,unit:'lbs'},{reps:12,weight:40,unit:'lbs'},{reps:12,weight:40,unit:'lbs'}]},
   {id:'plank',name:'Plank',machine:'Floor / Mat',targets:'Core, Stability',prescription:'3 sets × 30 seconds',sets:[{reps:30,weight:null,unit:'sec'},{reps:30,weight:null,unit:'sec'},{reps:30,weight:null,unit:'sec'}]},
 ];
 
@@ -856,7 +895,7 @@ function buildExerciseCards() {
       </div>
       <div id="exbody-${ex.id}" style="display:none;">
         <table class="sets-table">
-          <thead><tr><th>Set</th><th>${ex.id==='plank'?'Sec':'Reps'}</th>${ex.id!=='plank'?'<th>Weight (lbs)</th>':''}<th>Done</th></tr></thead>
+          <thead><tr><th>Set</th><th>${ex.id==='plank'?'Sec':'Reps'}</th>${ex.id==='plank'?'<th>Timer</th>':'<th>Weight (lbs)</th>'}<th>Done</th></tr></thead>
           <tbody id="setrows-${ex.id}"></tbody>
         </table>
         <button class="add-set-btn" onclick="addSet('${ex.id}')">
@@ -876,12 +915,24 @@ function renderSetRows(exId) {
   tbody.innerHTML='';
   exSets[exId].forEach((set,i)=>{
     const tr=document.createElement('tr'); tr.className=`set-row${set.completed?' completed':''}`; tr.id=`setrow-${exId}-${i}`;
-    tr.innerHTML=`<td><span class="set-num">${i+1}</span></td>
-      <td><input class="set-input" type="number" value="${set.reps}" min="1" id="reps-${exId}-${i}" onchange="updateSet('${exId}',${i},'reps',this.value)"></td>
-      ${!isPlank?`<td><input class="set-input" type="number" value="${set.weight||''}" min="0" placeholder="lbs" id="weight-${exId}-${i}" onchange="updateSet('${exId}',${i},'weight',this.value)"></td>`:''}
-      <td><button class="set-done-btn${set.completed?' completed':''}" id="setbtn-${exId}-${i}" onclick="completeSet('${exId}',${i})">
-        ${set.completed?'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" style="width:14px;height:14px"><path d="M20 6L9 17l-5-5"/></svg>':''}
-      </button></td>`;
+    if(isPlank){
+      tr.innerHTML=`<td><span class="set-num">${i+1}</span></td>
+        <td><input class="set-input" type="number" value="${set.reps}" min="5" id="reps-${exId}-${i}" onchange="updateSet('${exId}',${i},'reps',this.value)"></td>
+        <td style="text-align:center">
+          <button class="plank-start-btn" id="plank-btn-${exId}-${i}" onclick="startPlankTimer('${exId}',${i})">&#x25B6; Start</button>
+          <span class="plank-count" id="plank-count-${exId}-${i}" style="color:var(--muted)"></span>
+        </td>
+        <td><button class="set-done-btn${set.completed?' completed':''}" id="setbtn-${exId}-${i}" onclick="completeSet('${exId}',${i})">
+          ${set.completed?'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" style="width:14px;height:14px"><path d="M20 6L9 17l-5-5"/></svg>':''}
+        </button></td>`;
+    } else {
+      tr.innerHTML=`<td><span class="set-num">${i+1}</span></td>
+        <td><input class="set-input" type="number" value="${set.reps}" min="1" id="reps-${exId}-${i}" onchange="updateSet('${exId}',${i},'reps',this.value)"></td>
+        <td><input class="set-input" type="number" value="${set.weight||''}" min="0" placeholder="lbs" id="weight-${exId}-${i}" onchange="updateSet('${exId}',${i},'weight',this.value)"></td>
+        <td><button class="set-done-btn${set.completed?' completed':''}" id="setbtn-${exId}-${i}" onclick="completeSet('${exId}',${i})">
+          ${set.completed?'<svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" style="width:14px;height:14px"><path d="M20 6L9 17l-5-5"/></svg>':''}
+        </button></td>`;
+    }
     tbody.appendChild(tr);
   });
 }
@@ -902,7 +953,8 @@ function completeSet(exId,i) {
   document.getElementById(`exstatus-${exId}`).textContent=allDone?'✅':'○';
   renderSetRows(exId);
   if (exSets[exId][i].completed) {
-    startRestTimer(90);
+    startWorkoutTimer(); // start/keep workout elapsed timer
+    if (exId !== 'plank') startRestTimer(90);
     spawnCoins(document.getElementById(`setbtn-${exId}-${i}`));
   }
 }
@@ -913,16 +965,87 @@ function addSet(exId) {
   renderSetRows(exId);
 }
 
-// REST TIMER
+// REST TIMER (floating banner)
 function startRestTimer(s) {
   stopTimer(); timerSeconds=s;
-  document.getElementById('rest-timer').classList.add('active');
+  const banner = document.getElementById('rest-banner');
+  banner.classList.add('active');
   updateTimerDisplay();
-  timerInterval=setInterval(()=>{ timerSeconds--; updateTimerDisplay(); if(timerSeconds<=0){stopTimer();document.getElementById('timer-display').textContent='Go! 💪';} },1000);
+  timerInterval=setInterval(()=>{
+    timerSeconds--;
+    updateTimerDisplay();
+    if(timerSeconds<=0){stopTimer();document.getElementById('rest-banner-time').textContent='Go! 💪';setTimeout(stopTimer,1200);}
+  },1000);
 }
 function setRestTimer(s){startRestTimer(s);}
-function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;}document.getElementById('rest-timer').classList.remove('active');}
-function updateTimerDisplay(){const m=Math.floor(timerSeconds/60),s=timerSeconds%60;document.getElementById('timer-display').textContent=`${m}:${String(s).padStart(2,'0')}`;}
+function stopTimer(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+  document.getElementById('rest-banner').classList.remove('active');
+}
+function updateTimerDisplay(){
+  const m=Math.floor(timerSeconds/60),s=timerSeconds%60;
+  const t=`${m}:${String(s).padStart(2,'0')}`;
+  document.getElementById('rest-banner-time').textContent=t;
+  if(document.getElementById('timer-display'))document.getElementById('timer-display').textContent=t;
+}
+
+// WORKOUT ELAPSED TIMER
+function startWorkoutTimer(){
+  if(workoutTimerInterval) return; // already running
+  workoutStartTime = Date.now();
+  const startLabel = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('workout-start-label').textContent = startLabel;
+  workoutTimerInterval = setInterval(()=>{
+    const elapsed = Math.floor((Date.now()-workoutStartTime)/1000);
+    const m=Math.floor(elapsed/60),s=elapsed%60;
+    document.getElementById('workout-elapsed').textContent=`${m}:${String(s).padStart(2,'0')}`;
+  },1000);
+}
+function stopWorkoutTimer(){
+  if(workoutTimerInterval){clearInterval(workoutTimerInterval);workoutTimerInterval=null;}
+  workoutStartTime=null;
+  if(document.getElementById('workout-elapsed'))document.getElementById('workout-elapsed').textContent='0:00';
+  if(document.getElementById('workout-start-label'))document.getElementById('workout-start-label').textContent='—';
+}
+
+// PLANK TIMER
+function startPlankTimer(exId,setIdx){
+  const key=`${exId}-${setIdx}`;
+  // Clear any existing
+  if(plankTimers[key]){
+    clearInterval(plankTimers[key].interval);
+    delete plankTimers[key];
+  }
+  const countEl=document.getElementById(`plank-count-${exId}-${setIdx}`);
+  const btn=document.getElementById(`plank-btn-${exId}-${setIdx}`);
+  if(!countEl||!btn)return;
+  const totalSec=exSets[exId][setIdx].reps||30;
+  let remaining=totalSec+5; // 5s setup delay
+  countEl.textContent='Get ready...';
+  countEl.style.color='var(--amber)';
+  btn.disabled=true;
+  const interval=setInterval(()=>{
+    remaining--;
+    if(remaining>totalSec){
+      const setupLeft=remaining-totalSec;
+      countEl.textContent=`Starting in ${setupLeft}...`;
+      countEl.style.color='var(--amber)';
+    } else if(remaining>0){
+      countEl.textContent=`${remaining}s`;
+      countEl.style.color='var(--green)';
+    } else {
+      clearInterval(interval);
+      delete plankTimers[key];
+      countEl.textContent='Done! ✅';
+      countEl.style.color='var(--green)';
+      btn.disabled=false;
+      btn.textContent='🔁 Redo';
+      // Auto-complete the set
+      if(!exSets[exId][setIdx].completed) completeSet(exId,setIdx);
+    }
+  },1000);
+  plankTimers[key]={interval};
+}
 function selectCardioMachine(btn,name){
   selectedCardioMachine=name;
   document.querySelectorAll('#cardio-machine-btns button').forEach(b=>{b.style.borderColor='var(--border)';b.style.color='var(--muted)';b.style.background='transparent';});
@@ -962,10 +1085,30 @@ async function saveLog(date,log){
       const prevStreak=(appData.stats||{}).currentStreak||0;
       await loadData();
       stopTimer();
+      stopWorkoutTimer();
       showSuccess(log,result.stats,prevStreak);
       renderHome();renderCalendar();renderProgress();
     }
-  }catch(e){alert('Error saving. Are you connected?');}
+  }catch(e){
+    // Retry once silently before showing error
+    try {
+      await new Promise(r=>setTimeout(r,1000));
+      const res2=await fetch('/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log})});
+      const result2=await res2.json();
+      if(result2.success){
+        const prevStreak=(appData.stats||{}).currentStreak||0;
+        await loadData();
+        stopTimer();
+        stopWorkoutTimer();
+        showSuccess(log,result2.stats,prevStreak);
+        renderHome();renderCalendar();renderProgress();
+      }
+    } catch(e2){
+      console.error('Save failed:', e2);
+      // Show a non-blocking toast instead of alert
+      showToast('⚠️ Save failed — please try again');
+    }
+  }
 }
 
 async function logBodyWeight(){
@@ -1111,6 +1254,19 @@ function spawnCoins(el){
 function showPage(name,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById(`page-${name}`).classList.add('active');btn.classList.add('active');}
 function goToLog(){const logBtn=document.querySelectorAll('.nav-btn')[1];showPage('log',logBtn);renderLog();}
 function getToday(){return new Date().toISOString().split('T')[0];}
+
+function showToast(msg) {
+  let toast = document.getElementById('save-toast');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'save-toast';
+    toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(30,30,50,0.97);color:#f1f5f9;padding:10px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:500;border:1px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,0.5);';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.style.display = 'block';
+  setTimeout(() => { toast.style.display = 'none'; }, 3500);
+}
 
 init();
 </script>
