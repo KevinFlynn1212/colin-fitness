@@ -250,9 +250,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 .cheat-history-item:last-child { border-bottom:none; }
 
 /* INLINE REST TIMER (between exercise cards) */
-.rest-banner { background:rgba(14,165,233,0.08); border:1px solid rgba(14,165,233,0.3); border-radius:12px; padding:10px 14px; display:none; align-items:center; justify-content:space-between; margin-bottom:12px; }
+.rest-banner { background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.4); border-radius:12px; padding:10px 14px; display:none; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .rest-banner.active { display:flex; }
-.rest-banner-time { font-size:26px; font-weight:900; color:var(--blue); font-family:'Righteous',sans-serif; line-height:1; }
+.rest-banner-time { font-size:26px; font-weight:900; color:var(--amber); font-family:'Righteous',sans-serif; line-height:1; }
 .rest-banner-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:2px; }
 
 /* PLANK TIMER */
@@ -671,7 +671,7 @@ async function init() {
 
 async function loadData() {
   try {
-    const res = await fetch('/api/data');
+    const res = await fetch('api/data');
     appData = await res.json();
   } catch(e) {
     appData = {logs:{},stats:{currentStreak:0,longestStreak:0,totalCardioMinutes:0,totalStrengthSessions:0,totalWorkouts:0,zone2Compliance:0,monthWorkouts:0,monthMissed:0,weekDone:0,weekTotal:5,daysUntilGoal:1826,workoutsToGoal:500,workoutGoalProgress:0,totalVolume:0,milestones:{}},prs:{},bodyWeight:{},cheatDays:0,spinsAvailable:{},cheatHistory:[]};
@@ -838,7 +838,7 @@ async function closeSpinWheel() {
 
 async function applySpinReward(prize, reason) {
   try {
-    await fetch('/api/spin-reward', {
+    await fetch('api/spin-reward', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({prize, reason})
@@ -854,7 +854,7 @@ async function cashInCheatDay() {
   const confirmed = confirm('Cash in 1 cheat day? Today will be logged as a free rest day. 🎲');
   if (!confirmed) return;
   try {
-    await fetch('/api/cashin-cheat', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:getToday()})});
+    await fetch('api/cashin-cheat', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:getToday()})});
     await loadData();
     renderHome(); renderProgress(); renderCalendar();
     launchCoins(20);
@@ -1089,7 +1089,7 @@ async function logRest(){await saveLog(document.getElementById('log-date').value
 
 async function saveLog(date,log){
   try{
-    const res=await fetch('/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log})});
+    const res=await fetch('api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log})});
     const result=await res.json();
     if(result.success){
       const prevStreak=(appData.stats||{}).currentStreak||0;
@@ -1103,7 +1103,7 @@ async function saveLog(date,log){
     // Retry once silently before showing error
     try {
       await new Promise(r=>setTimeout(r,1000));
-      const res2=await fetch('/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log})});
+      const res2=await fetch('api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log})});
       const result2=await res2.json();
       if(result2.success){
         const prevStreak=(appData.stats||{}).currentStreak||0;
@@ -1123,7 +1123,7 @@ async function saveLog(date,log){
 
 async function logBodyWeight(){
   const val=document.getElementById('bw-input').value; if(!val)return;
-  await fetch('/api/bodyweight',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:getToday(),weight:val})});
+  await fetch('api/bodyweight',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date:getToday(),weight:val})});
   await loadData(); renderProgress();
 }
 
