@@ -1284,7 +1284,10 @@ function spawnCoins(el){
 // NAV
 function showPage(name,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById(`page-${name}`).classList.add('active');btn.classList.add('active');}
 function goToLog(){const logBtn=document.querySelectorAll('.nav-btn')[1];showPage('log',logBtn);renderLog();}
-function getToday(){return new Date().toISOString().split('T')[0];}
+function getToday(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
 
 function showToast(msg) {
   let toast = document.getElementById('save-toast');

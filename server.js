@@ -72,10 +72,11 @@ function computeStats(data) {
   const now = new Date();
   const monthStart = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
   let monthWorkouts=0, monthMissed=0;
-  let d2=new Date(monthStart);
+  // Start from the later of month start or app start date so we don't count days before app began
+  let d2=new Date(data.startDate > monthStart ? data.startDate : monthStart);
   while (d2<=new Date(today)) {
     const ds=d2.toISOString().split('T')[0], dow=d2.getDay(), log=logs[ds];
-    if (dow!==0) {
+    if (dow!==0 && dow!==6) { // exclude Sunday (rest) and Saturday (optional walk)
       if (log && ['cardio','strength','active','cheat'].includes(log.type)) monthWorkouts++;
       else if (ds<today) monthMissed++;
     }
