@@ -700,7 +700,7 @@ function renderHome() {
   document.getElementById('stat-days-to-60').textContent = stats.daysUntilGoal?.toLocaleString()||'—';
   document.getElementById('stat-month-done').textContent = stats.monthWorkouts;
   document.getElementById('stat-missed').textContent = stats.monthMissed;
-  const walkCount = Object.values(appData.logs||{}).filter(l=>l.type==='active'&&l.walked).length;
+  const walkCount = appData.totalWalks || 0;
   document.getElementById('stat-walks').textContent = walkCount;
   const walksLeft = Math.max(0, 10 - walkCount);
   document.getElementById('stat-walks-to-spin').textContent = walksLeft > 0 ? `${walksLeft} more for 🎰` : '🎉 Spin earned!';
@@ -877,7 +877,7 @@ function renderLog() {
   buildExerciseCards();
   updateLogDateLabel();
   // Show walk count
-  const walkCount = Object.values(appData.logs||{}).filter(l=>l.type==='active'&&l.walked).length;
+  const walkCount = appData.totalWalks || 0;
   const walkEl = document.getElementById('walk-count-display');
   if (walkEl) {
     const remaining = Math.max(0, 10 - walkCount);
@@ -1106,9 +1106,28 @@ async function submitLog(){
   await saveLog(date,log);
 }
 async function logActiveRest(walked){
-  // Always use today's local date for walk logs
-  const date = getToday();
-  await saveLog(date, {type:'active', walked});
+  if (!walked) { showToast('Walk skipped.'); return; }
+  try {
+    const res = await fetch('/fitness/api/walk', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({date:getToday(), today:getToday()})
+    });
+    const result = await res.json();
+    if (result.success) {
+      await loadData();
+      renderHome(); renderProgress(); renderLog();
+      // Show success
+      document.getElementById('overlay-icon').textContent = '🐕';
+      document.getElementById('overlay-title').textContent = 'Walk Logged!';
+      document.getElementById('overlay-sub').textContent = `${result.totalWalks} walk${result.totalWalks===1?'':'s'} total. Keep it up!`;
+      document.getElementById('overlay-streak').style.display='none';
+      document.getElementById('success-overlay').classList.add('show');
+      launchCelebration();
+    }
+  } catch(e) {
+    showToast('⚠️ Save failed — try again');
+  }
 }
 async function logRest(){
   const date = getToday();

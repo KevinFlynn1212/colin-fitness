@@ -139,7 +139,8 @@ app.get('/api/data', (req,res) => {
   const clientToday = req.query.today || null;
   const stats = computeStats(data, clientToday);
   saveData(data);
-  res.json({...data, stats});
+  const totalWalks = (data.walks||[]).length;
+  res.json({...data, stats, totalWalks});
 });
 
 app.get('/api/stats', (req,res) => { const data=loadData(); res.json(computeStats(data)); });
@@ -225,5 +226,22 @@ app.get('/icon-512.png', (req,res) => res.sendFile(path.join(__dirname,'icon.svg
 app.get('/icon.svg', (req,res) => res.sendFile(path.join(__dirname,'icon.svg')));
 app.get('/spin-demo.html', (req,res) => res.sendFile(path.join(__dirname,'spin-demo.html')));
 app.get('*', (req,res) => res.sendFile(path.join(__dirname,'index.html')));
+
+app.post('/api/walk', (req,res) => {
+  const data = loadData();
+  const {date, today} = req.body;
+  if (!data.walks) data.walks = [];
+  data.walks.push({date: date || new Date().toISOString().split('T')[0], loggedAt: new Date().toISOString()});
+  const totalWalks = data.walks.length;
+  // Check 10-walk milestone
+  if (!data.milestones) data.milestones = {};
+  if (!data.spinsAvailable) data.spinsAvailable = {};
+  if (totalWalks >= 10 && !data.milestones.walks10) {
+    data.milestones.walks10 = true;
+    data.spinsAvailable.walks10 = true;
+  }
+  saveData(data);
+  res.json({success:true, totalWalks});
+});
 
 app.listen(PORT, () => console.log(`🎰 Best Bove 60 running on port ${PORT}`));
