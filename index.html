@@ -926,7 +926,7 @@ function buildExerciseCards() {
       </div>`;
     container.appendChild(card);
     renderSetRows(ex.id);
-    if (idx===0) toggleExCard(ex.id);
+    toggleExCard(ex.id); // open all by default
   });
 }
 
@@ -1118,7 +1118,7 @@ async function saveLog(date,log){
       stopTimer();
       stopWorkoutTimer();
       showSuccess(log,result.stats,prevStreak);
-      renderHome();renderCalendar();renderProgress();
+      renderHome();renderCalendar();renderProgress();renderLog();
     }
   }catch(e){
     // Retry once silently before showing error
@@ -1132,7 +1132,7 @@ async function saveLog(date,log){
         stopTimer();
         stopWorkoutTimer();
         showSuccess(log,result2.stats,prevStreak);
-        renderHome();renderCalendar();renderProgress();
+        renderHome();renderCalendar();renderProgress();renderLog();
       }
     } catch(e2){
       console.error('Save failed:', e2);
