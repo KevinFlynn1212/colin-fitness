@@ -19,7 +19,7 @@ function getDefaultData() {
     startDate:'2026-05-08', goal:'Best Bove 60', goalDate:'2031-10-18',
     workoutGoal:500, logs:{}, prs:{}, bodyWeight:{},
     cheatDays:0, spinsAvailable:{}, cheatHistory:[],
-    milestones:{firstWorkout:false,streak7:false,workouts30:false,cardio500min:false,streak30:false,workouts100:false,cardio1000min:false,sixMonths:false,oneYear:false}
+    milestones:{firstWorkout:false,walks10:false,streak7:false,workouts30:false,cardio500min:false,streak30:false,workouts100:false,cardio1000min:false,sixMonths:false,oneYear:false}
   };
 }
 
@@ -101,6 +101,10 @@ function computeStats(data) {
   if ((currentStreak>=7||longestStreak>=7) && !m.streak7) { m.streak7=true; if(!spins.streak7)spins.streak7=true; }
   if (totalWorkouts>=30 && !m.workouts30) { m.workouts30=true; if(!spins.workouts30)spins.workouts30=true; }
   if (totalCardioMinutes>=500 && !m.cardio500min) { m.cardio500min=true; if(!spins.cardio500)spins.cardio500=true; }
+
+  // Count dog walks
+  const totalWalks = logDates.filter(d => logs[d] && logs[d].type==='active' && logs[d].walked).length;
+  if (totalWalks>=10 && !m.walks10) { m.walks10=true; if(!spins.walks10)spins.walks10=true; }
   if ((currentStreak>=30||longestStreak>=30) && !m.streak30) { m.streak30=true; if(!spins.streak30)spins.streak30=true; }
   if (totalWorkouts>=100 && !m.workouts100) { m.workouts100=true; if(!spins.workouts100)spins.workouts100=true; }
   if (totalCardioMinutes>=1000 && !m.cardio1000min) { m.cardio1000min=true; if(!spins.cardio1000)spins.cardio1000=true; }
@@ -119,7 +123,7 @@ function computeStats(data) {
 
   return {
     currentStreak, longestStreak, totalCardioMinutes, totalStrengthSessions,
-    totalCardioSessions, totalWorkouts, totalVolume:Math.round(totalVolume),
+    totalCardioSessions, totalWorkouts, totalVolume:Math.round(totalVolume), totalWalks,
     zone2Compliance:totalCardioSessions>0?Math.round((cardioZone2Sessions/totalCardioSessions)*100):0,
     monthWorkouts, monthMissed, weekDone, weekTotal:5,
     workoutsToGoal:Math.max(0,workoutGoal-totalWorkouts),

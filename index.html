@@ -438,7 +438,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <div class="card" style="text-align:center;padding:24px;">
       <div style="font-size:48px;margin-bottom:12px;">🐕</div>
       <div style="font-size:18px;font-weight:700;margin-bottom:8px;">Dog Walk Day</div>
-      <div style="font-size:14px;color:var(--muted);margin-bottom:20px;">Did you get those steps in?</div>
+      <div style="font-size:14px;color:var(--muted);margin-bottom:8px;">Did you get those steps in?</div>
+      <div style="font-size:13px;color:var(--green);font-weight:700;margin-bottom:16px;" id="walk-count-display"></div>
       <div style="display:flex;gap:12px;">
         <button class="btn btn-green" onclick="logActiveRest(true)">✅ Yes, walked!</button>
         <button class="btn btn-outline" onclick="logActiveRest(false)">❌ Not today</button>
@@ -616,6 +617,7 @@ const EXERCISES = [
 
 const MILESTONES = [
   {key:'firstWorkout',icon:'🔥',name:'First Step',desc:'Log your first workout'},
+  {key:'walks10',icon:'🐕',name:'10 Dog Walks',desc:'Walk the dog 10 times — earn a spin!'},
   {key:'streak7',icon:'📅',name:'7-Day Streak',desc:'7 consecutive days — earn a spin!'},
   {key:'workouts30',icon:'💪',name:'30 Workouts',desc:'Complete 30 total sessions — earn a spin!'},
   {key:'cardio500min',icon:'🏃',name:'500 Cardio Minutes',desc:'500 minutes of Zone 2 — earn a spin!'},
@@ -738,7 +740,7 @@ function checkPendingSpins() {
   const available = Object.keys(spins).filter(k=>spins[k]);
   if (available.length > 0) {
     document.getElementById('spin-alert').style.display = 'flex';
-    const reasons = {streak7:'🔥 7-day streak reward!',streak14:'🔥 14-day streak reward!',streak30:'🔥 30-day streak reward!',workouts30:'💪 30 workouts milestone!',workouts100:'💪 100 workouts milestone!',cardio500:'🏃 500 cardio minutes!',cardio1000:'🏆 1000 cardio minutes!'};
+    const reasons = {streak7:'🔥 7-day streak reward!',streak14:'🔥 14-day streak reward!',streak30:'🔥 30-day streak reward!',workouts30:'💪 30 workouts milestone!',workouts100:'💪 100 workouts milestone!',cardio500:'🏃 500 cardio minutes!',cardio1000:'🏆 1000 cardio minutes!',walks10:'🐕 10 dog walks milestone!'};
     document.getElementById('spin-alert-reason').textContent = reasons[available[0]] || 'Milestone reward unlocked';
     pendingSpinReason = available[0];
   } else {
@@ -866,6 +868,17 @@ function renderLog() {
   document.getElementById('log-date').value = getToday();
   buildExerciseCards();
   updateLogDateLabel();
+  // Show walk count
+  const walkCount = Object.values(appData.logs||{}).filter(l=>l.type==='active'&&l.walked).length;
+  const walkEl = document.getElementById('walk-count-display');
+  if (walkEl) {
+    const remaining = Math.max(0, 10 - walkCount);
+    if (walkCount >= 10) {
+      walkEl.textContent = `🎉 ${walkCount} walks total — milestone reached!`;
+    } else {
+      walkEl.textContent = `${walkCount} walks total · ${remaining} more for a spin reward 🎰`;
+    }
+  }
 }
 
 function updateLogDateLabel() {
