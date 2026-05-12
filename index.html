@@ -1105,8 +1105,16 @@ async function submitLog(){
   }
   await saveLog(date,log);
 }
-async function logActiveRest(walked){await saveLog(document.getElementById('log-date').value,{type:'active',walked});}
-async function logRest(){await saveLog(document.getElementById('log-date').value,{type:'rest'});}
+async function logActiveRest(walked){
+  const dateEl = document.getElementById('log-date');
+  const date = dateEl && dateEl.value ? dateEl.value : getToday();
+  await saveLog(date, {type:'active', walked});
+}
+async function logRest(){
+  const dateEl = document.getElementById('log-date');
+  const date = dateEl && dateEl.value ? dateEl.value : getToday();
+  await saveLog(date, {type:'rest'});
+}
 
 async function saveLog(date,log){
   try{
@@ -1172,7 +1180,12 @@ function showSuccess(log,stats,prevStreak){
     setTimeout(()=>{closeOverlay();checkPendingSpins();},2500);
   }
 }
-function closeOverlay(){document.getElementById('success-overlay').classList.remove('show');}
+function closeOverlay(){
+  document.getElementById('success-overlay').classList.remove('show');
+  // Go back to home screen
+  const homeBtn = document.querySelectorAll('.nav-btn')[0];
+  showPage('home', homeBtn);
+}
 
 // CALENDAR
 function getDayIcon(dow,log){
