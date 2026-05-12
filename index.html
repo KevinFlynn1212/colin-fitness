@@ -677,7 +677,7 @@ async function init() {
 
 async function loadData() {
   try {
-    const res = await fetch('/fitness/api/data');
+    const res = await fetch('/fitness/api/data?today=' + getToday());
     appData = await res.json();
   } catch(e) {
     appData = {logs:{},stats:{currentStreak:0,longestStreak:0,totalCardioMinutes:0,totalStrengthSessions:0,totalWorkouts:0,zone2Compliance:0,monthWorkouts:0,monthMissed:0,weekDone:0,weekTotal:5,daysUntilGoal:1826,workoutsToGoal:500,workoutGoalProgress:0,totalVolume:0,milestones:{}},prs:{},bodyWeight:{},cheatDays:0,spinsAvailable:{},cheatHistory:[]};
@@ -1118,7 +1118,7 @@ async function logRest(){
 
 async function saveLog(date,log){
   try{
-    const res=await fetch('/fitness/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log})});
+    const res=await fetch('/fitness/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log,today:getToday()})});
     const result=await res.json();
     if(result.success){
       const prevStreak=(appData.stats||{}).currentStreak||0;
@@ -1132,7 +1132,7 @@ async function saveLog(date,log){
     // Retry once silently before showing error
     try {
       await new Promise(r=>setTimeout(r,1000));
-      const res2=await fetch('/fitness/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log})});
+      const res2=await fetch('/fitness/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log,today:getToday()})};
       const result2=await res2.json();
       if(result2.success){
         const prevStreak=(appData.stats||{}).currentStreak||0;

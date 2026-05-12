@@ -25,7 +25,7 @@ function getDefaultData() {
 
 function saveData(data) { fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2)); }
 
-function computeStats(data) {
+function computeStats(data, clientToday) {
   const logs = data.logs;
   const logDates = Object.keys(logs).sort();
   let totalCardioMinutes=0, totalStrengthSessions=0, cardioZone2Sessions=0, totalCardioSessions=0, totalVolume=0;
@@ -46,7 +46,7 @@ function computeStats(data) {
     }
   }
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = clientToday || new Date().toISOString().split('T')[0];
   let currentStreak=0;
   let checkDate = new Date(today);
   while (true) {
@@ -136,7 +136,8 @@ function computeStats(data) {
 
 app.get('/api/data', (req,res) => {
   const data = loadData();
-  const stats = computeStats(data);
+  const clientToday = req.query.today || null;
+  const stats = computeStats(data, clientToday);
   saveData(data);
   res.json({...data, stats});
 });
@@ -160,7 +161,8 @@ app.post('/api/log', (req,res) => {
       }
     }
   }
-  const stats = computeStats(data);
+  const clientToday = req.body.today || date;
+  const stats = computeStats(data, clientToday);
   saveData(data);
   res.json({success:true, stats, prs:data.prs});
 });
