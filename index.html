@@ -1181,9 +1181,10 @@ function showSuccess(log,stats,prevStreak){
 }
 function closeOverlay(){
   document.getElementById('success-overlay').classList.remove('show');
-  // Go back to home screen
+  // Go back to home screen and re-render with fresh data
   const homeBtn = document.querySelectorAll('.nav-btn')[0];
   showPage('home', homeBtn);
+  renderHome();
 }
 
 // CALENDAR
