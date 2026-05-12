@@ -1106,13 +1106,12 @@ async function submitLog(){
   await saveLog(date,log);
 }
 async function logActiveRest(walked){
-  const dateEl = document.getElementById('log-date');
-  const date = dateEl && dateEl.value ? dateEl.value : getToday();
+  // Always use today's local date for walk logs
+  const date = getToday();
   await saveLog(date, {type:'active', walked});
 }
 async function logRest(){
-  const dateEl = document.getElementById('log-date');
-  const date = dateEl && dateEl.value ? dateEl.value : getToday();
+  const date = getToday();
   await saveLog(date, {type:'rest'});
 }
 
@@ -1206,8 +1205,10 @@ function renderCalendar(){
   for(let day=1;day<=daysInMonth;day++){
     const ds=`${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
     const dow=new Date(ds).getDay(),isFuture=ds>today,log=appData.logs[ds],isToday=ds===today;
-    let cls=isFuture?'future':dow===0?'rest':log?'done':'missed';
-    if(dow===6&&!log&&!isFuture)cls='rest';
+    const startDate=appData.startDate||'2026-05-08';
+    const beforeStart=ds<startDate;
+    let cls=isFuture||beforeStart?'future':dow===0?'rest':log?'done':'missed';
+    if(dow===6&&!log&&!isFuture&&!beforeStart)cls='rest';
     if(log&&log.type==='cheat')cls='done';
     const icon=getDayIcon(dow,log);
     const el=document.createElement('div');
