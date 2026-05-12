@@ -1132,7 +1132,7 @@ async function saveLog(date,log){
     // Retry once silently before showing error
     try {
       await new Promise(r=>setTimeout(r,1000));
-      const res2=await fetch('/fitness/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log,today:getToday()})};
+      const res2=await fetch('/fitness/api/log',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({date,log,today:getToday()})});
       const result2=await res2.json();
       if(result2.success){
         const prevStreak=(appData.stats||{}).currentStreak||0;
