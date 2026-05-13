@@ -348,7 +348,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
   <!-- STATS -->
   <div class="stats-row">
     <div class="stat-card gold"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">🔥 Day Streak</div></div>
-    <div class="stat-card" style="border-color:var(--rose);"><div class="stat-value" style="color:var(--rose);font-size:18px;" id="stat-streak-to-spin">7 for spin</div><div class="stat-label">🎰 Streak Reward</div></div>
+    <div class="stat-card" style="border-color:var(--rose);"><div class="stat-value" style="color:var(--rose);font-size:18px;" id="stat-streak-to-spin">7 for spin</div><div class="stat-label" id="stat-streak-spin-label">🎰 Streak Reward</div></div>
     <div class="stat-card green"><div class="stat-value" id="stat-month-done">0</div><div class="stat-label">✅ This Month</div></div>
     <div class="stat-card red"><div class="stat-value" id="stat-missed">0</div><div class="stat-label">❌ Missed</div></div>
   </div>
@@ -784,7 +784,7 @@ function renderHome() {
       streakEl.textContent = `${left} more`;
       streakEl.style.color = left <= 2 ? 'var(--gold)' : 'var(--rose)';
     }
-    document.querySelector('[id="stat-streak-to-spin"]').closest('.stat-card').querySelector('.stat-label').textContent = `🎰 ${nextTarget}-day spin`;
+    document.getElementById('stat-streak-spin-label').textContent = `🎰 ${nextTarget}-day spin`;
   }
   const walkCount = appData.totalWalks || 0;
   document.getElementById('stat-walks').textContent = walkCount;
