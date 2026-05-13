@@ -307,6 +307,12 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <p id="motivational-msg">Let's get to work.</p>
   </div>
 
+  <!-- DAYS TO 60 SLIM BANNER -->
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(90deg,#0c1e0f,#0f2847);border:1px solid var(--green);border-radius:12px;padding:8px 16px;margin-bottom:12px;">
+    <span style="font-size:13px;color:var(--muted);font-weight:600;">🎂 Days to 60th birthday:</span>
+    <span style="font-size:18px;font-weight:900;color:var(--green);font-family:'Righteous',sans-serif;" id="stat-days-to-60-banner">—</span>
+  </div>
+
   <!-- SPIN ALERT -->
   <div id="spin-alert" style="display:none;" class="spin-alert">
     <div>
@@ -342,13 +348,13 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
   <!-- STATS -->
   <div class="stats-row">
     <div class="stat-card gold"><div class="stat-value" id="stat-streak">0</div><div class="stat-label">🔥 Day Streak</div></div>
-    <div class="stat-card amber"><div class="stat-value" id="stat-days-to-60">—</div><div class="stat-label">📅 Days to 60</div></div>
+    <div class="stat-card" style="border-color:var(--rose);"><div class="stat-value" style="color:var(--rose);font-size:18px;" id="stat-streak-to-spin">7 for spin</div><div class="stat-label">🎰 Streak Reward</div></div>
     <div class="stat-card green"><div class="stat-value" id="stat-month-done">0</div><div class="stat-label">✅ This Month</div></div>
     <div class="stat-card red"><div class="stat-value" id="stat-missed">0</div><div class="stat-label">❌ Missed</div></div>
   </div>
   <div class="stats-row" style="grid-template-columns:1fr 1fr;">
     <div class="stat-card" style="border-color:var(--green);"><div class="stat-value" style="color:var(--green);" id="stat-walks">0</div><div class="stat-label">🐕 Dog Walks</div></div>
-    <div class="stat-card" style="border-color:var(--muted);"><div class="stat-value" style="color:var(--muted);font-size:18px;" id="stat-walks-to-spin">10 for spin</div><div class="stat-label">🎰 Next Reward</div></div>
+    <div class="stat-card" style="border-color:var(--muted);"><div class="stat-value" style="color:var(--muted);font-size:18px;" id="stat-walks-to-spin">10 for spin</div><div class="stat-label">🎰 Walk Reward</div></div>
   </div>
 
   <!-- GOAL + WEEK -->
@@ -755,9 +761,31 @@ function renderHome() {
     document.getElementById('today-badge').innerHTML = '✅ Logged today!';
   }
   document.getElementById('stat-streak').textContent = stats.currentStreak;
-  document.getElementById('stat-days-to-60').textContent = stats.daysUntilGoal?.toLocaleString()||'—';
+  document.getElementById('stat-days-to-60-banner').textContent = stats.daysUntilGoal?.toLocaleString() || '—';
   document.getElementById('stat-month-done').textContent = stats.monthWorkouts;
   document.getElementById('stat-missed').textContent = stats.monthMissed;
+
+  // Streak → next spin reward countdown
+  const streak = stats.currentStreak || 0;
+  const streakEl = document.getElementById('stat-streak-to-spin');
+  const milestones = appData.stats?.milestones || {};
+  // Next streak milestones: 7, 14, 30
+  const streakTargets = [7, 14, 30];
+  const nextTarget = streakTargets.find(t => streak < t);
+  if (!nextTarget) {
+    streakEl.textContent = '🌟 Max!';
+    streakEl.style.color = 'var(--gold)';
+  } else {
+    const left = nextTarget - streak;
+    if (left === 0) {
+      streakEl.textContent = '🎉 Spin earned!';
+      streakEl.style.color = 'var(--gold)';
+    } else {
+      streakEl.textContent = `${left} more`;
+      streakEl.style.color = left <= 2 ? 'var(--gold)' : 'var(--rose)';
+    }
+    document.querySelector('[id="stat-streak-to-spin"]').closest('.stat-card').querySelector('.stat-label').textContent = `🎰 ${nextTarget}-day spin`;
+  }
   const walkCount = appData.totalWalks || 0;
   document.getElementById('stat-walks').textContent = walkCount;
   const walksLeft = Math.max(0, 10 - walkCount);
