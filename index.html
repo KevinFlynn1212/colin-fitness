@@ -264,6 +264,23 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 .workout-timer-bar { background:rgba(14,165,233,0.08); border:1px solid rgba(14,165,233,0.3); border-radius:12px; padding:10px 14px; display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; }
 .workout-timer-elapsed { font-size:26px; font-weight:900; color:var(--blue); font-family:'Righteous',sans-serif; }
 .workout-timer-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
+
+/* CARDIO COUNTDOWN TIMER */
+.cardio-timer-card { background:linear-gradient(135deg,#0c1e3b,#0a1520); border:2px solid var(--blue); border-radius:20px; padding:20px 16px; margin-bottom:16px; text-align:center; }
+.cardio-timer-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--blue); margin-bottom:10px; }
+.cardio-countdown { font-size:72px; font-weight:900; font-family:'Righteous',sans-serif; color:var(--gold); line-height:1; margin-bottom:8px; transition:color 0.5s; }
+.cardio-countdown.urgent { color:var(--red); animation:urgentPulse 1s infinite; }
+@keyframes urgentPulse { 0%,100%{opacity:1} 50%{opacity:0.7} }
+.cardio-countdown.done { color:var(--green); }
+.cardio-encouragement { min-height:44px; display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:700; color:var(--text); margin-bottom:12px; padding:0 8px; opacity:0; transition:opacity 0.4s; text-align:center; line-height:1.4; }
+.cardio-encouragement.show { opacity:1; }
+.cardio-timer-btns { display:flex; gap:10px; justify-content:center; }
+.btn-cardio-start { background:linear-gradient(135deg,var(--green),#059669); color:white; border:none; font-family:'Righteous',sans-serif; font-size:16px; font-weight:700; padding:12px 28px; border-radius:14px; cursor:pointer; transition:all 0.15s; }
+.btn-cardio-start:hover { transform:scale(1.05); }
+.btn-cardio-pause { background:linear-gradient(135deg,var(--amber),#d97706); color:#000; border:none; font-family:inherit; font-size:14px; font-weight:700; padding:10px 20px; border-radius:12px; cursor:pointer; }
+.btn-cardio-stop { background:rgba(239,68,68,0.15); color:var(--red); border:1.5px solid var(--red); font-family:inherit; font-size:14px; font-weight:700; padding:10px 20px; border-radius:12px; cursor:pointer; }
+.cardio-progress-bar { height:6px; background:var(--border); border-radius:3px; overflow:hidden; margin-bottom:14px; }
+.cardio-progress-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,var(--blue),var(--gold)); transition:width 1s linear; width:0%; }
 </style>
 </head>
 <body>
@@ -359,10 +376,24 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 
   <!-- CARDIO -->
   <div id="form-cardio">
+
+    <!-- CARDIO COUNTDOWN TIMER -->
+    <div class="cardio-timer-card" id="cardio-timer-card">
+      <div class="cardio-timer-label">⏱️ Cardio Countdown</div>
+      <div class="cardio-progress-bar"><div class="cardio-progress-fill" id="cardio-progress-fill"></div></div>
+      <div class="cardio-countdown" id="cardio-countdown">30:00</div>
+      <div class="cardio-encouragement" id="cardio-encouragement">Press Start when you step on the machine 💪</div>
+      <div class="cardio-timer-btns">
+        <button class="btn-cardio-start" id="btn-cardio-start" onclick="startCardioTimer()">▶ Start</button>
+        <button class="btn-cardio-pause" id="btn-cardio-pause" onclick="pauseCardioTimer()" style="display:none;">⏸ Pause</button>
+        <button class="btn-cardio-stop" id="btn-cardio-stop" onclick="stopCardioTimer()" style="display:none;">■ Reset</button>
+      </div>
+    </div>
+
     <div class="form-group">
       <label class="form-label">Minutes Completed</label>
       <div class="minutes-display"><span id="cardio-mins-display">30</span> <span>min</span></div>
-      <input type="range" min="5" max="90" step="5" value="30" id="cardio-slider" oninput="document.getElementById('cardio-mins-display').textContent=this.value">
+      <input type="range" min="5" max="90" step="5" value="30" id="cardio-slider" oninput="onCardioSliderChange(this.value)">
     </div>
     <div class="form-group">
       <label class="form-label">Machine / Equipment</label>
@@ -1335,6 +1366,167 @@ function showToast(msg) {
   toast.style.display = 'block';
   setTimeout(() => { toast.style.display = 'none'; }, 3500);
 }
+
+// ── CARDIO COUNTDOWN TIMER ──────────────────────────────────────────────────
+let cardioTimerInterval = null;
+let cardioTotalSeconds = 30 * 60;
+let cardioSecondsLeft = 30 * 60;
+let cardioTimerRunning = false;
+let cardioTimerPaused = false;
+let cardioLastEncouragementMinute = -1;
+
+const CARDIO_ENCOURAGEMENTS = {
+  // Every 10 minutes (keyed by elapsed minutes)
+  10: ["10 minutes down! You're just warming up 🔥", "First 10 in the books. Heart's happy! ❤️"],
+  20: ["20 minutes! You're in the zone now 💪", "Two-thirds there — Zone 2 doing its thing! 🚀"],
+  30: ["30 minutes strong! Your heart loves you for this ❤️‍🔥", "30 down! Glucose is getting torched right now 🔥"],
+  40: ["40 minutes — absolute machine! 💎", "40 in! Zone 2 cardio master right here 👑"],
+  50: ["50 minutes! You showed UP today 🏆", "50 in — you're building something real. Beast mode! 💪"],
+  60: ["AN HOUR! Legend status unlocked 🏅", "60 minutes of Zone 2 — that's elite level stuff! 🌟"],
+  70: ["70 minutes?! You're an absolute unit 🦾", "70 in — the 60th birthday version of you is smiling 😎"],
+  80: ["80 minutes — unstoppable! 🚂", "80 in — every cardiologist's dream patient right now 💊"],
+  // Last 5 minutes (keyed by minutes REMAINING)
+  5: ["⏰ 5 minutes left — you've got this!", "⏰ Almost there! 5 to go — don't let up!"],
+  4: ["⏰ 4 minutes! Dig deep, almost done! 💥", "⏰ 4 more minutes of greatness!"],
+  3: ["⏰ 3 minutes! Push through! 🔥", "⏰ You're going to feel amazing in 3 minutes!"],
+  2: ["⏰ 2 minutes! FINISH STRONG! 💪", "⏰ 2 more — you didn't come this far to stop now!"],
+  1: ["⏰ LAST MINUTE! Give it everything! 🎯", "⏰ 60 seconds — maximum effort, let's GO! 🚀"],
+};
+
+function onCardioSliderChange(val) {
+  document.getElementById('cardio-mins-display').textContent = val;
+  if (!cardioTimerRunning && !cardioTimerPaused) {
+    cardioTotalSeconds = parseInt(val) * 60;
+    cardioSecondsLeft = cardioTotalSeconds;
+    updateCardioDisplay();
+  }
+}
+
+function startCardioTimer() {
+  if (cardioTimerRunning) return;
+  if (!cardioTimerPaused) {
+    // Fresh start
+    const mins = parseInt(document.getElementById('cardio-slider').value);
+    cardioTotalSeconds = mins * 60;
+    cardioSecondsLeft = cardioTotalSeconds;
+    cardioLastEncouragementMinute = -1;
+  }
+  cardioTimerRunning = true;
+  cardioTimerPaused = false;
+  document.getElementById('btn-cardio-start').style.display = 'none';
+  document.getElementById('btn-cardio-pause').style.display = 'inline-block';
+  document.getElementById('btn-cardio-stop').style.display = 'inline-block';
+  showCardioEncouragement("Let's GO! Zone 2 activated 🚀");
+  cardioTimerInterval = setInterval(tickCardioTimer, 1000);
+}
+
+function pauseCardioTimer() {
+  if (!cardioTimerRunning) return;
+  clearInterval(cardioTimerInterval);
+  cardioTimerRunning = false;
+  cardioTimerPaused = true;
+  document.getElementById('btn-cardio-pause').textContent = '▶ Resume';
+  document.getElementById('btn-cardio-pause').onclick = resumeCardioTimer;
+  showCardioEncouragement("Paused — catch your breath! 😤");
+}
+
+function resumeCardioTimer() {
+  document.getElementById('btn-cardio-pause').textContent = '⏸ Pause';
+  document.getElementById('btn-cardio-pause').onclick = pauseCardioTimer;
+  cardioTimerPaused = false;
+  startCardioTimer();
+}
+
+function stopCardioTimer() {
+  clearInterval(cardioTimerInterval);
+  cardioTimerRunning = false;
+  cardioTimerPaused = false;
+  const mins = parseInt(document.getElementById('cardio-slider').value);
+  cardioTotalSeconds = mins * 60;
+  cardioSecondsLeft = cardioTotalSeconds;
+  cardioLastEncouragementMinute = -1;
+  document.getElementById('btn-cardio-start').style.display = 'inline-block';
+  document.getElementById('btn-cardio-pause').style.display = 'none';
+  document.getElementById('btn-cardio-stop').style.display = 'none';
+  document.getElementById('btn-cardio-pause').textContent = '⏸ Pause';
+  document.getElementById('btn-cardio-pause').onclick = pauseCardioTimer;
+  document.getElementById('cardio-countdown').className = 'cardio-countdown';
+  updateCardioDisplay();
+  showCardioEncouragement("Press Start when you step on the machine 💪");
+}
+
+function tickCardioTimer() {
+  if (cardioSecondsLeft <= 0) {
+    clearInterval(cardioTimerInterval);
+    cardioTimerRunning = false;
+    document.getElementById('cardio-countdown').textContent = '00:00';
+    document.getElementById('cardio-countdown').className = 'cardio-countdown done';
+    document.getElementById('cardio-progress-fill').style.width = '100%';
+    document.getElementById('btn-cardio-pause').style.display = 'none';
+    document.getElementById('btn-cardio-stop').style.display = 'none';
+    document.getElementById('btn-cardio-start').style.display = 'inline-block';
+    document.getElementById('btn-cardio-start').textContent = '✅ Done!';
+    showCardioEncouragement("🎉 YOU DID IT! Amazing work today!");
+    // Set slider to actual time done
+    const minsDone = Math.round((cardioTotalSeconds) / 60);
+    document.getElementById('cardio-slider').value = minsDone;
+    document.getElementById('cardio-mins-display').textContent = minsDone;
+    return;
+  }
+  cardioSecondsLeft--;
+  updateCardioDisplay();
+
+  const elapsedMinutes = Math.floor((cardioTotalSeconds - cardioSecondsLeft) / 60);
+  const remainingMinutes = Math.ceil(cardioSecondsLeft / 60);
+  const remainingSeconds = cardioSecondsLeft % 60;
+
+  // Urgency color for last 5 minutes
+  const countdown = document.getElementById('cardio-countdown');
+  if (cardioSecondsLeft <= 300 && cardioSecondsLeft > 0) {
+    countdown.className = 'cardio-countdown urgent';
+  } else {
+    countdown.className = 'cardio-countdown';
+  }
+
+  // Every-10-minute encouragements (fire exactly at :00 of each 10-min mark)
+  const elapsedSec = cardioTotalSeconds - cardioSecondsLeft;
+  if (elapsedSec > 0 && elapsedSec % 600 === 0) {
+    const minKey = elapsedSec / 60;
+    if (minKey !== cardioLastEncouragementMinute && CARDIO_ENCOURAGEMENTS[minKey]) {
+      cardioLastEncouragementMinute = minKey;
+      const msgs = CARDIO_ENCOURAGEMENTS[minKey];
+      showCardioEncouragement(msgs[Math.floor(Math.random() * msgs.length)]);
+    }
+  }
+
+  // Per-minute countdown for last 5 minutes (fire when remaining drops to whole minute)
+  if (cardioSecondsLeft <= 300 && remainingSeconds === 0 && remainingMinutes >= 1 && remainingMinutes <= 5) {
+    if (cardioLastEncouragementMinute !== -remainingMinutes) {
+      cardioLastEncouragementMinute = -remainingMinutes;
+      const msgs = CARDIO_ENCOURAGEMENTS[remainingMinutes];
+      if (msgs) showCardioEncouragement(msgs[Math.floor(Math.random() * msgs.length)]);
+    }
+  }
+}
+
+function updateCardioDisplay() {
+  const m = Math.floor(cardioSecondsLeft / 60);
+  const s = cardioSecondsLeft % 60;
+  document.getElementById('cardio-countdown').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  const elapsed = cardioTotalSeconds - cardioSecondsLeft;
+  const pct = cardioTotalSeconds > 0 ? Math.min(100, (elapsed / cardioTotalSeconds) * 100) : 0;
+  document.getElementById('cardio-progress-fill').style.width = pct + '%';
+}
+
+function showCardioEncouragement(msg) {
+  const el = document.getElementById('cardio-encouragement');
+  el.classList.remove('show');
+  setTimeout(() => {
+    el.textContent = msg;
+    el.classList.add('show');
+  }, 100);
+}
+// ────────────────────────────────────────────────────────────────────────────
 
 init();
 </script>
