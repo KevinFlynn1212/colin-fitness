@@ -818,7 +818,6 @@ function renderHome() {
   document.getElementById('week-fraction').textContent = `${stats.weekDone} / 5`;
   document.getElementById('week-prog-bar').style.width = `${(stats.weekDone/5)*100}%`;
 
-  const streak = stats.currentStreak;
   let msg = "Let's get to work.";
   if (streak>=30) msg="A full month of consistency. You're a different person now. 🌟";
   else if (streak>=7) msg=`${streak} days straight. That's a habit forming. 💪`;
