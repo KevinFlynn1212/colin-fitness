@@ -48,7 +48,9 @@ function computeStats(data, clientToday) {
 
   const today = clientToday || new Date().toISOString().split('T')[0];
   let currentStreak=0;
+  // Start from yesterday if today hasn't been logged yet (day isn't over)
   let checkDate = new Date(today);
+  if (!logs[today]) checkDate.setDate(checkDate.getDate()-1);
   while (true) {
     const ds = checkDate.toISOString().split('T')[0];
     const log = logs[ds], dow = checkDate.getDay();
