@@ -265,6 +265,21 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 .workout-timer-elapsed { font-size:26px; font-weight:900; color:var(--blue); font-family:'Righteous',sans-serif; }
 .workout-timer-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--muted); }
 
+/* CARDIO FINISH CELEBRATION */
+.cardio-celebration { position:fixed; inset:0; background:rgba(0,0,0,0.92); display:none; align-items:center; justify-content:center; z-index:500; flex-direction:column; overflow:hidden; }
+.cardio-celebration.show { display:flex; }
+.cardio-celebration-inner { text-align:center; animation:celebPop 0.5s cubic-bezier(0.17,0.67,0.12,0.99); }
+@keyframes celebPop { from{transform:scale(0.4) rotate(-8deg);opacity:0} 60%{transform:scale(1.15) rotate(2deg)} to{transform:scale(1) rotate(0deg);opacity:1} }
+.cardio-celeb-emoji { font-size:80px; display:block; margin-bottom:12px; animation:emojiSpin 1s ease; }
+@keyframes emojiSpin { 0%{transform:rotate(-20deg) scale(0)} 60%{transform:rotate(10deg) scale(1.2)} 100%{transform:rotate(0deg) scale(1)} }
+.cardio-celeb-title { font-family:'Righteous',sans-serif; font-size:42px; font-weight:900; background:linear-gradient(135deg,var(--gold),var(--rose),var(--blue)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:8px; line-height:1.1; }
+.cardio-celeb-sub { font-size:18px; font-weight:700; color:var(--text); margin-bottom:6px; }
+.cardio-celeb-stat { font-size:15px; color:var(--muted); margin-bottom:24px; }
+.cardio-celeb-streak { font-size:22px; font-weight:900; color:var(--rose); margin-bottom:20px; font-family:'Righteous',sans-serif; }
+.btn-cardio-celeb-close { background:linear-gradient(135deg,var(--gold),var(--amber)); color:#000; border:none; font-family:'Righteous',sans-serif; font-size:18px; font-weight:900; padding:14px 40px; border-radius:16px; cursor:pointer; box-shadow:0 4px 24px rgba(255,215,0,0.4); transition:transform 0.15s; }
+.btn-cardio-celeb-close:hover { transform:scale(1.05); }
+.firework { position:fixed; pointer-events:none; z-index:600; }
+
 /* CARDIO COUNTDOWN TIMER */
 .cardio-timer-card { background:linear-gradient(135deg,#0c1e3b,#0a1520); border:2px solid var(--blue); border-radius:20px; padding:20px 16px; margin-bottom:16px; text-align:center; }
 .cardio-timer-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--blue); margin-bottom:10px; }
@@ -568,6 +583,18 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <button class="btn-xs btn-outline" onclick="setRestTimer(90)">90s</button>
     <button class="btn-xs btn-outline" onclick="setRestTimer(120)">2m</button>
     <button class="btn-xs" style="background:var(--red);color:white;border:none;border-radius:8px;cursor:pointer;font-family:inherit;font-weight:700;padding:5px 10px;font-size:12px;" onclick="stopTimer()">✕ Stop</button>
+  </div>
+</div>
+
+<!-- CARDIO FINISH CELEBRATION -->
+<div class="cardio-celebration" id="cardio-celebration">
+  <div class="cardio-celebration-inner">
+    <span class="cardio-celeb-emoji" id="cardio-celeb-emoji">🏆</span>
+    <div class="cardio-celeb-title" id="cardio-celeb-title">CARDIO DONE!</div>
+    <div class="cardio-celeb-sub" id="cardio-celeb-sub">You crushed it today!</div>
+    <div class="cardio-celeb-stat" id="cardio-celeb-stat"></div>
+    <div class="cardio-celeb-streak" id="cardio-celeb-streak" style="display:none;"></div>
+    <button class="btn-cardio-celeb-close" onclick="closeCardioCelebration()">LOG IT & COLLECT 💰</button>
   </div>
 </div>
 
@@ -1468,9 +1495,11 @@ function tickCardioTimer() {
     document.getElementById('btn-cardio-start').textContent = '✅ Done!';
     showCardioEncouragement("🎉 YOU DID IT! Amazing work today!");
     // Set slider to actual time done
-    const minsDone = Math.round((cardioTotalSeconds) / 60);
+    const minsDone = Math.round(cardioTotalSeconds / 60);
     document.getElementById('cardio-slider').value = minsDone;
     document.getElementById('cardio-mins-display').textContent = minsDone;
+    // 🎉 Trigger celebration
+    showCardioCelebration(minsDone);
     return;
   }
   cardioSecondsLeft--;
@@ -1516,6 +1545,71 @@ function updateCardioDisplay() {
   const elapsed = cardioTotalSeconds - cardioSecondsLeft;
   const pct = cardioTotalSeconds > 0 ? Math.min(100, (elapsed / cardioTotalSeconds) * 100) : 0;
   document.getElementById('cardio-progress-fill').style.width = pct + '%';
+}
+
+function showCardioCelebration(minutes) {
+  const messages = [
+    { emoji:'🏆', title:'ZONE 2 CHAMPION!', sub:'Your heart just got stronger.' },
+    { emoji:'🔥', title:'CARDIO BEAST!', sub:'That glucose didn\'t stand a chance.' },
+    { emoji:'💪', title:'CRUSHED IT!', sub:'Best Bove 60 is happening right now.' },
+    { emoji:'🚀', title:'OUT OF THIS WORLD!', sub:'Cardiologist is proud. Very proud.' },
+    { emoji:'⭐', title:'SUPERSTAR SESSION!', sub:'You showed up and delivered.' },
+    { emoji:'🎯', title:'MISSION COMPLETE!', sub:'Another step closer to 60 & thriving.' },
+  ];
+  const pick = messages[Math.floor(Math.random() * messages.length)];
+  document.getElementById('cardio-celeb-emoji').textContent = pick.emoji;
+  document.getElementById('cardio-celeb-title').textContent = pick.title;
+  document.getElementById('cardio-celeb-sub').textContent = pick.sub;
+  document.getElementById('cardio-celeb-stat').textContent = `⏱️ ${minutes} minutes of Zone 2 cardio — done!`;
+  const streak = (appData.stats || {}).currentStreak || 0;
+  const streakEl = document.getElementById('cardio-celeb-streak');
+  if (streak >= 2) {
+    streakEl.textContent = `🔥 ${streak} day streak!`;
+    streakEl.style.display = 'block';
+  } else {
+    streakEl.style.display = 'none';
+  }
+  document.getElementById('cardio-celebration').classList.add('show');
+  launchFireworks();
+  launchCoins(30);
+}
+
+function closeCardioCelebration() {
+  document.getElementById('cardio-celebration').classList.remove('show');
+  // Clear any lingering fireworks
+  document.querySelectorAll('.firework').forEach(f => f.remove());
+}
+
+function launchFireworks() {
+  const colors = ['#ffd700','#ff6b9d','#0ea5e9','#10b981','#8b5cf6','#f59e0b','#ef4444','#ffffff'];
+  let count = 0;
+  const burst = () => {
+    if (count > 8) return;
+    count++;
+    const x = 10 + Math.random() * 80;
+    const y = 5 + Math.random() * 60;
+    for (let i = 0; i < 20; i++) {
+      const el = document.createElement('div');
+      el.className = 'firework';
+      const angle = (i / 20) * 2 * Math.PI;
+      const speed = 60 + Math.random() * 80;
+      const dx = Math.cos(angle) * speed;
+      const dy = Math.sin(angle) * speed;
+      const size = 4 + Math.random() * 5;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      el.style.cssText = `left:${x}vw;top:${y}vh;width:${size}px;height:${size}px;background:${color};border-radius:50%;`;
+      el.animate([
+        { transform: 'translate(0,0) scale(1)', opacity: 1 },
+        { transform: `translate(${dx}px,${dy}px) scale(0)`, opacity: 0 }
+      ], { duration: 700 + Math.random() * 400, easing: 'ease-out', fill: 'forwards' });
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1200);
+    }
+    setTimeout(burst, 350);
+  };
+  burst();
+  // Also do a big confetti shower
+  setTimeout(launchCelebration, 200);
 }
 
 function showCardioEncouragement(msg) {
