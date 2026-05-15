@@ -584,6 +584,25 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <div class="stat-card amber"><div class="stat-value" id="prog-longest">0</div><div class="stat-label">Longest Streak</div></div>
     <div class="stat-card" style="border-color:var(--purple);"><div class="stat-value" style="color:var(--purple);" id="prog-volume">0</div><div class="stat-label">Volume (lbs)</div></div>
   </div>
+  <div class="section-title">Weekly Streak 🗓️</div>
+  <div class="card">
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:14px;">
+      <div style="text-align:center;min-width:60px;">
+        <div style="font-size:40px;font-weight:900;font-family:'Righteous',sans-serif;color:var(--rose);" id="prog-perf-weeks">0</div>
+        <div style="font-size:11px;color:var(--muted);font-weight:600;">consecutive</div>
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:14px;font-weight:700;margin-bottom:4px;">Perfect Weeks</div>
+        <div style="font-size:12px;color:var(--muted);" id="prog-perf-weeks-sub">Complete Mon–Thu every week to build your streak</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:10px;" id="prog-week-milestones"></div>
+    <div class="goal-bar-label" style="margin-top:4px;">
+      <span style="font-size:12px;color:var(--muted);" id="prog-week-next-label">Next milestone</span>
+      <span style="font-size:12px;font-weight:700;color:var(--gold);" id="prog-week-next-val"></span>
+    </div>
+    <div class="goal-bar-outer"><div class="goal-bar-inner" id="prog-week-bar" style="background:linear-gradient(90deg,var(--rose),var(--gold));width:0%"></div></div>
+  </div>
   <div class="section-title">Personal Records 🏆</div>
   <div class="card" id="pr-list"></div>
   <div class="section-title">Cheat Day History</div>
@@ -710,12 +729,13 @@ const EXERCISES = [
 const MILESTONES = [
   {key:'firstWorkout',icon:'🔥',name:'First Step',desc:'Log your first workout'},
   {key:'walks10',icon:'🐕',name:'10 Dog Walks',desc:'Walk the dog 10 times — earn a spin!'},
-  {key:'streak7',icon:'📅',name:'7-Day Streak',desc:'7 consecutive days — earn a spin!'},
+  {key:'firstWeek',icon:'🗓️',name:'First Perfect Week',desc:'Complete all 4 workouts Mon–Thu — earn a small spin!',source:'weekly'},
   {key:'workouts30',icon:'💪',name:'30 Workouts',desc:'Complete 30 total sessions — earn a spin!'},
   {key:'cardio500min',icon:'🏃',name:'500 Cardio Minutes',desc:'500 minutes of Zone 2 — earn a spin!'},
-  {key:'streak30',icon:'🔥',name:'30-Day Streak',desc:'30 consecutive days — earn a BIG spin!'},
+  {key:'weeks4',icon:'🔥',name:'4-Week Streak',desc:'4 consecutive perfect weeks — earn a medium spin!',source:'weekly'},
   {key:'workouts100',icon:'💪',name:'100 Workouts',desc:'Complete 100 sessions — earn a BIG spin!'},
   {key:'cardio1000min',icon:'🏆',name:'1000 Cardio Minutes',desc:'Serious cardio — earn a JACKPOT spin!'},
+  {key:'weeks8',icon:'🏆',name:'8-Week Legend',desc:'8 consecutive perfect weeks — earn the JACKPOT spin!',source:'weekly'},
   {key:'sixMonths',icon:'⭐',name:'6 Months Strong',desc:'6 months since you started'},
   {key:'oneYear',icon:'🎯',name:'One Year In',desc:'365 days on the journey'},
   {key:'placeholder',icon:'🏆',name:'Best Bove 60',desc:'The ultimate goal — October 2031'},
@@ -1408,9 +1428,52 @@ function renderProgress(){
   const chList=document.getElementById('cheat-history-list'),history=appData.cheatHistory||[];
   if(!history.length){chList.innerHTML='<p style="color:var(--muted);font-size:14px;">No cheat days used yet — earn some by spinning! 🎰</p>';}
   else{chList.innerHTML='';history.slice(-5).reverse().forEach(h=>{const item=document.createElement('div');item.className='cheat-history-item';item.innerHTML=`<span>${h.date}</span><span style="color:var(--gold);font-weight:700;">${h.type==='earned'?'🎰 +'+h.amount+' earned':'🎲 Used'}</span>`;chList.appendChild(item);});}
+  // Weekly streak section
+  const perfWeeks = appData.stats?.consecutivePerfectWeeks || 0;
+  const perfWeeksEl = document.getElementById('prog-perf-weeks');
+  perfWeeksEl.textContent = perfWeeks;
+  perfWeeksEl.style.color = perfWeeks >= 8 ? 'var(--gold)' : perfWeeks >= 4 ? 'var(--purple)' : 'var(--rose)';
+  const wm = appData.weeklyMilestones || {};
+  const totalPerfWeeks = Object.values(appData.weeklyRewards||{}).filter(v=>v===true).length;
+  document.getElementById('prog-perf-weeks-sub').textContent =
+    perfWeeks >= 8 ? '🌟 8-week legend — you\'re a machine!' :
+    perfWeeks >= 4 ? `${8-perfWeeks} more weeks for JACKPOT spin! 💰` :
+    perfWeeks > 0 ? `${4-perfWeeks} more weeks for medium spin 🎰` :
+    `${totalPerfWeeks} perfect week${totalPerfWeeks!==1?'s':''} total — build that streak!`;
+  // Milestone badges
+  const wmMilestones = document.getElementById('prog-week-milestones');
+  wmMilestones.innerHTML = [
+    {label:'1st Week',done:totalPerfWeeks>=1,color:'var(--green)'},
+    {label:'4-Week 🎰',done:!!wm.weeks4,color:'var(--purple)'},
+    {label:'8-Week 💰',done:!!wm.weeks8,color:'var(--gold)'},
+  ].map(b=>`<div style="flex:1;padding:8px 4px;border-radius:10px;text-align:center;font-size:11px;font-weight:700;background:${b.done?b.color.replace(')',',0.2)').replace('var(','rgba('):'var(--card2)'};border:1px solid ${b.done?b.color:'var(--border)'};color:${b.done?b.color:'var(--muted)'}">${b.done?'✅':''} ${b.label}</div>`).join('');
+  // Progress bar to next milestone
+  const nextMilestone = perfWeeks < 4 ? 4 : perfWeeks < 8 ? 8 : null;
+  if (nextMilestone) {
+    const prev = nextMilestone === 4 ? 0 : 4;
+    const pct = Math.round(((perfWeeks-prev)/(nextMilestone-prev))*100);
+    document.getElementById('prog-week-bar').style.width = pct+'%';
+    document.getElementById('prog-week-next-label').textContent = `Progress to ${nextMilestone}-week milestone`;
+    document.getElementById('prog-week-next-val').textContent = `${perfWeeks}/${nextMilestone} weeks`;
+  } else {
+    document.getElementById('prog-week-bar').style.width = '100%';
+    document.getElementById('prog-week-next-label').textContent = 'All milestones achieved!';
+    document.getElementById('prog-week-next-val').textContent = '🌟';
+  }
   // Milestones
   const list=document.getElementById('milestones-list');list.innerHTML='';
-  MILESTONES.forEach(m=>{const achieved=m.key==='placeholder'?false:(appData.stats.milestones?.[m.key]||false);const item=document.createElement('div');item.className=`milestone-item${achieved?'':' locked'}`;item.innerHTML=`<div class="milestone-icon">${m.icon}</div><div class="milestone-info"><div class="milestone-name">${m.name}</div><div class="milestone-desc">${m.desc}</div></div><div>${achieved?'✅':'🔒'}</div>`;list.appendChild(item);});
+  MILESTONES.forEach(m=>{
+    let achieved;
+    if(m.source==='weekly') {
+      if(m.key==='firstWeek') achieved = totalPerfWeeks >= 1;
+      else achieved = !!(appData.weeklyMilestones||{})[m.key];
+    } else {
+      achieved = m.key==='placeholder' ? false : (appData.stats.milestones?.[m.key]||false);
+    }
+    const item=document.createElement('div');item.className=`milestone-item${achieved?'':' locked'}`;
+    item.innerHTML=`<div class="milestone-icon">${m.icon}</div><div class="milestone-info"><div class="milestone-name">${m.name}</div><div class="milestone-desc">${m.desc}</div></div><div>${achieved?'✅':'🔒'}</div>`;
+    list.appendChild(item);
+  });
 }
 
 // ANIMATIONS
