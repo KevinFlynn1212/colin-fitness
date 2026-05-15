@@ -55,7 +55,7 @@ function computeStats(data, clientToday) {
     const ds = checkDate.toISOString().split('T')[0];
     const log = logs[ds], dow = checkDate.getDay();
     if (log && ['cardio','strength','active','cheat'].includes(log.type)) currentStreak++;
-    else if (dow===0) { /* rest */ }
+    else if (dow===0 || dow===5 || dow===6) { /* rest days: Fri/Sat/Sun */ }
     else break;
     checkDate.setDate(checkDate.getDate()-1);
     if (currentStreak>365) break;
@@ -66,7 +66,7 @@ function computeStats(data, clientToday) {
   while (d<=todayDate) {
     const ds=d.toISOString().split('T')[0], log=logs[ds], dow=new Date(ds).getDay();
     if (log && ['cardio','strength','active','cheat'].includes(log.type)) { tempStreak++; if(tempStreak>longestStreak)longestStreak=tempStreak; }
-    else if (dow===0) {}
+    else if (dow===0 || dow===5 || dow===6) {}
     else tempStreak=0;
     d.setDate(d.getDate()+1);
   }
@@ -78,7 +78,7 @@ function computeStats(data, clientToday) {
   let d2=new Date(data.startDate > monthStart ? data.startDate : monthStart);
   while (d2<=new Date(today)) {
     const ds=d2.toISOString().split('T')[0], dow=d2.getDay(), log=logs[ds];
-    if (dow!==0 && dow!==6) { // exclude Sunday (rest) and Saturday (optional walk)
+    if (dow!==0 && dow!==5 && dow!==6) { // exclude Fri/Sat/Sun (rest days)
       if (log && ['cardio','strength','active','cheat'].includes(log.type)) monthWorkouts++;
       else if (ds<today) monthMissed++;
     }
@@ -88,7 +88,7 @@ function computeStats(data, clientToday) {
   const startOfWeek = new Date(now);
   startOfWeek.setDate(now.getDate()-now.getDay()+1);
   let weekDone=0;
-  for (let i=0;i<5;i++) {
+  for (let i=0;i<4;i++) {
     const wd=new Date(startOfWeek); wd.setDate(startOfWeek.getDate()+i);
     const wds=wd.toISOString().split('T')[0];
     if (logs[wds]&&['cardio','strength'].includes(logs[wds].type)) weekDone++;
@@ -128,7 +128,7 @@ function computeStats(data, clientToday) {
     currentStreak, longestStreak, totalCardioMinutes, totalStrengthSessions,
     totalCardioSessions, totalWorkouts, totalVolume:Math.round(totalVolume), totalWalks,
     zone2Compliance:totalCardioSessions>0?Math.round((cardioZone2Sessions/totalCardioSessions)*100):0,
-    monthWorkouts, monthMissed, weekDone, weekTotal:5,
+    monthWorkouts, monthMissed, weekDone, weekTotal:4,
     workoutsToGoal:Math.max(0,workoutGoal-totalWorkouts),
     workoutGoalProgress:Math.min(100,Math.round((totalWorkouts/workoutGoal)*100)),
     daysUntilGoal:Math.ceil((new Date(data.goalDate)-new Date(today))/86400000),

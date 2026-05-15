@@ -368,7 +368,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <div class="form-label" style="margin-top:14px;">This Week</div>
     <div class="week-dots" id="week-dots"></div>
     <div style="display:flex;justify-content:space-between;margin-top:8px;">
-      <span style="font-size:12px;color:var(--muted)">Mon — Fri</span>
+      <span style="font-size:12px;color:var(--muted)">Mon — Thu</span>
       <span style="font-size:12px;font-weight:700;" id="week-fraction">0 / 5</span>
     </div>
     <div class="prog-bar-outer"><div class="prog-bar-inner" id="week-prog-bar" style="background:var(--blue);width:0%"></div></div>
@@ -669,8 +669,8 @@ const WORKOUT_SCHEDULE = {
   2:{type:'cardio',label:'Zone 2 Cardio',detail:'30 min — bike, treadmill, or elliptical',badge:'🚴 Cardio Day'},
   3:{type:'strength',label:'Full Body Strength',detail:'45 min — machines + cables',badge:'💪 Strength Day'},
   4:{type:'cardio',label:'Zone 2 Cardio',detail:'30 min — bike, treadmill, or elliptical',badge:'🚴 Cardio Day'},
-  5:{type:'cardio',label:'Zone 2 Cardio',detail:'30 min — bike, treadmill, or elliptical',badge:'🚴 Cardio Day'},
-  6:{type:'active',label:'Active Rest',detail:'Dog walk + light movement',badge:'🐕 Walk Day'},
+  5:{type:'rest',label:'Rest Day',detail:'Weekend starts now — enjoy the break!',badge:'😴 Rest Day'},
+  6:{type:'rest',label:'Rest Day',detail:'Rest up — back at it Monday',badge:'😴 Rest Day'},
   0:{type:'rest',label:'Full Rest Day',detail:'Recovery is part of the plan',badge:'😴 Rest Day'},
 };
 
@@ -744,7 +744,7 @@ async function loadData() {
     const res = await fetch('/fitness/api/data?today=' + getToday());
     appData = await res.json();
   } catch(e) {
-    appData = {logs:{},stats:{currentStreak:0,longestStreak:0,totalCardioMinutes:0,totalStrengthSessions:0,totalWorkouts:0,zone2Compliance:0,monthWorkouts:0,monthMissed:0,weekDone:0,weekTotal:5,daysUntilGoal:1826,workoutsToGoal:500,workoutGoalProgress:0,totalVolume:0,milestones:{}},prs:{},bodyWeight:{},cheatDays:0,spinsAvailable:{},cheatHistory:[]};
+    appData = {logs:{},stats:{currentStreak:0,longestStreak:0,totalCardioMinutes:0,totalStrengthSessions:0,totalWorkouts:0,zone2Compliance:0,monthWorkouts:0,monthMissed:0,weekDone:0,weekTotal:4,daysUntilGoal:1826,workoutsToGoal:500,workoutGoalProgress:0,totalVolume:0,milestones:{}},prs:{},bodyWeight:{},cheatDays:0,spinsAvailable:{},cheatHistory:[]};
   }
 }
 
@@ -804,10 +804,10 @@ function renderHome() {
 
   const weekDots = document.getElementById('week-dots');
   weekDots.innerHTML = '';
-  const days = ['M','T','W','T','F'];
+  const days = ['M','T','W','T'];
   const monday = new Date(today);
   monday.setDate(today.getDate()-(today.getDay()===0?6:today.getDay()-1));
-  for (let i=0;i<5;i++) {
+  for (let i=0;i<4;i++) {
     const d = new Date(monday); d.setDate(monday.getDate()+i);
     const ds = d.toISOString().split('T')[0];
     const isToday=ds===todayStr, logged=appData.logs[ds], isPast=d<today&&!isToday;
@@ -1293,7 +1293,7 @@ function closeOverlay(){
 
 // CALENDAR
 function getDayIcon(dow,log){
-  if(dow===0)return'😴';if(dow===6)return'🐕';
+  if(dow===0||dow===5||dow===6)return'😴';
   if(log){if(log.type==='cardio')return'🚴';if(log.type==='strength')return'💪';if(log.type==='active')return'🐕';if(log.type==='rest'||log.type==='cheat')return'😴';}
   return WORKOUT_SCHEDULE[dow].type==='cardio'?'🚴':WORKOUT_SCHEDULE[dow].type==='strength'?'💪':'😴';
 }
@@ -1312,8 +1312,7 @@ function renderCalendar(){
     const dow=new Date(ds).getDay(),isFuture=ds>today,log=appData.logs[ds],isToday=ds===today;
     const startDate=appData.startDate||'2026-05-08';
     const beforeStart=ds<startDate;
-    let cls=isFuture||beforeStart?'future':dow===0?'rest':log?'done':'missed';
-    if(dow===6&&!log&&!isFuture&&!beforeStart)cls='rest';
+    let cls=isFuture||beforeStart?'future':(dow===0||dow===5||dow===6)?'rest':log?'done':'missed';
     if(log&&log.type==='cheat')cls='done';
     const icon=getDayIcon(dow,log);
     const el=document.createElement('div');
