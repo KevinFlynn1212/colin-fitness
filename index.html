@@ -314,13 +314,20 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <span style="font-size:18px;font-weight:900;color:var(--green);font-family:'Righteous',sans-serif;" id="stat-days-to-60-banner">—</span>
   </div>
 
-  <!-- SPIN ALERT -->
-  <div id="spin-alert" style="display:none;" class="spin-alert">
-    <div>
-      <div class="spin-alert-text">🎰 You earned a spin!</div>
-      <div class="spin-alert-sub" id="spin-alert-reason">Streak reward unlocked</div>
+  <!-- SPIN BANK -->
+  <div style="background:linear-gradient(135deg,#1a0020,#200010);border:2px solid var(--rose);border-radius:20px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;" id="spin-bank">
+    <div style="position:absolute;inset:0;background:radial-gradient(circle at 50% -20%,rgba(255,107,157,0.15),transparent 60%);pointer-events:none;"></div>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--rose);margin-bottom:4px;">🎰 Spin Bank</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:42px;font-weight:900;font-family:'Righteous',sans-serif;line-height:1;color:var(--muted);" id="spin-count">0</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px;">spins available</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;" id="spin-bank-note">Complete a full week to earn!</div>
+      </div>
+      <div>
+        <button id="btn-spin-bank" onclick="openSpinWheel()" disabled style="background:linear-gradient(135deg,var(--rose),var(--purple));color:white;border:none;font-family:inherit;font-size:14px;font-weight:800;padding:12px 20px;border-radius:12px;cursor:pointer;transition:all 0.15s;opacity:0.4;">SPIN 🎰</button>
+      </div>
     </div>
-    <button class="btn-spin-now" onclick="openSpinWheel()">SPIN NOW</button>
   </div>
 
   <!-- CHEAT DAY BANK -->
@@ -867,25 +874,39 @@ function renderHome() {
 }
 
 function checkPendingSpins() {
+  updateSpinBank();
+}
+
+function updateSpinBank() {
   const spins = appData.spinsAvailable || {};
   const available = Object.keys(spins).filter(k => spins[k]);
-  if (available.length > 0) {
-    document.getElementById('spin-alert').style.display = 'flex';
-    const reason = available[0];
-    const staticReasons = {workouts30:'💪 30 workouts milestone!',workouts100:'💪 100 workouts milestone!',cardio500:'🏃 500 cardio minutes!',cardio1000:'🏆 1000 cardio minutes!',walks10:'🐕 10 dog walks milestone!'};
-    let reasonText;
-    if (reason.startsWith('week_')) {
-      const tier = spins[reason];
-      if (tier === 'jackpot') reasonText = '🏆 8-week perfect streak — JACKPOT SPIN!';
-      else if (tier === 'medium') reasonText = '🔥 4 perfect weeks — Medium Spin!';
-      else reasonText = '✅ Perfect week — spin your reward!';
-    } else {
-      reasonText = staticReasons[reason] || 'Milestone reward unlocked';
-    }
-    document.getElementById('spin-alert-reason').textContent = reasonText;
-    pendingSpinReason = reason;
+  const count = available.length;
+  const countEl = document.getElementById('spin-count');
+  const btn = document.getElementById('btn-spin-bank');
+  const noteEl = document.getElementById('spin-bank-note');
+  if (!countEl) return;
+  countEl.textContent = count;
+  btn.disabled = count === 0;
+  btn.style.opacity = count === 0 ? '0.4' : '1';
+  if (count > 0) {
+    const tiers = available.map(r => getTierForReason(r));
+    const bestTier = tiers.includes('jackpot') ? 'jackpot' : tiers.includes('medium') ? 'medium' : 'small';
+    const tierInfo = {
+      small:{text:'🎉 Perfect week reward ready!',col:'var(--rose)',btn:'linear-gradient(135deg,var(--rose),var(--purple))'},
+      medium:{text:'🔥 4-week streak reward ready!',col:'var(--purple)',btn:'linear-gradient(135deg,var(--purple),#6d28d9)'},
+      jackpot:{text:'💰 JACKPOT spin ready!',col:'var(--gold)',btn:'linear-gradient(135deg,var(--gold),var(--amber))'},
+    }[bestTier];
+    noteEl.textContent = tierInfo.text;
+    noteEl.style.color = tierInfo.col;
+    countEl.style.color = tierInfo.col;
+    btn.style.background = tierInfo.btn;
+    btn.style.color = bestTier === 'jackpot' ? '#000' : 'white';
   } else {
-    document.getElementById('spin-alert').style.display = 'none';
+    noteEl.textContent = 'Complete a full week to earn!';
+    noteEl.style.color = 'var(--muted)';
+    countEl.style.color = 'var(--muted)';
+    btn.style.background = 'linear-gradient(135deg,var(--rose),var(--purple))';
+    btn.style.color = 'white';
   }
 }
 
@@ -904,8 +925,12 @@ function getTierForReason(reason) {
 }
 
 function openSpinWheel() {
+  const spins = appData.spinsAvailable || {};
+  const available = Object.keys(spins).filter(k => spins[k]);
+  if (available.length === 0) return;
+  pendingSpinReason = available[0];
   spinTier = getTierForReason(pendingSpinReason);
-  const tierLabels = {small:'Streak Reward 🎲',medium:'Milestone Bonus 🎰',jackpot:'JACKPOT SPIN 💰'};
+  const tierLabels = {small:'Weekly Reward 🎲',medium:'4-Week Streak 🎰',jackpot:'JACKPOT SPIN 💰'};
   document.getElementById('spin-subtitle').textContent = tierLabels[spinTier] || 'You earned this!';
   document.getElementById('spin-overlay').classList.add('show');
   document.getElementById('btn-do-spin').disabled = false;
@@ -1412,10 +1437,10 @@ function renderProgress(){
   document.getElementById('prog-cardio-min').textContent=stats.totalCardioMinutes;
   document.getElementById('prog-longest').textContent=stats.longestStreak;
   document.getElementById('prog-volume').textContent=(stats.totalVolume||0).toLocaleString();
-  const pct=stats.workoutGoalProgress||0;
-  document.getElementById('prog-goal-bar').style.width=pct+'%';
+  const goalPct=stats.workoutGoalProgress||0;
+  document.getElementById('prog-goal-bar').style.width=goalPct+'%';
   document.getElementById('prog-workouts-done').textContent=`${stats.totalWorkouts} / 500 workouts`;
-  document.getElementById('prog-pct').textContent=pct+'%';
+  document.getElementById('prog-pct').textContent=goalPct+'%';
   document.getElementById('prog-workouts-left').textContent=`${stats.workoutsToGoal} workouts to go`;
   // PRs
   const prList=document.getElementById('pr-list'),prs=appData.prs||{},prKeys=Object.keys(prs);
@@ -1442,17 +1467,18 @@ function renderProgress(){
     `${totalPerfWeeks} perfect week${totalPerfWeeks!==1?'s':''} total — build that streak!`;
   // Milestone badges
   const wmMilestones = document.getElementById('prog-week-milestones');
-  wmMilestones.innerHTML = [
-    {label:'1st Week',done:totalPerfWeeks>=1,color:'var(--green)'},
-    {label:'4-Week 🎰',done:!!wm.weeks4,color:'var(--purple)'},
-    {label:'8-Week 💰',done:!!wm.weeks8,color:'var(--gold)'},
-  ].map(b=>`<div style="flex:1;padding:8px 4px;border-radius:10px;text-align:center;font-size:11px;font-weight:700;background:${b.done?b.color.replace(')',',0.2)').replace('var(','rgba('):'var(--card2)'};border:1px solid ${b.done?b.color:'var(--border)'};color:${b.done?b.color:'var(--muted)'}">${b.done?'✅':''} ${b.label}</div>`).join('');
+  const badgeDefs = [
+    {label:'1st Week',done:totalPerfWeeks>=1,bg:'rgba(16,185,129,0.2)',border:'#10b981',col:'#10b981'},
+    {label:'4-Week 🎰',done:!!wm.weeks4,bg:'rgba(139,92,246,0.2)',border:'#8b5cf6',col:'#8b5cf6'},
+    {label:'8-Week 💰',done:!!wm.weeks8,bg:'rgba(255,215,0,0.2)',border:'#ffd700',col:'#ffd700'},
+  ];
+  wmMilestones.innerHTML = badgeDefs.map(b=>`<div style="flex:1;padding:8px 4px;border-radius:10px;text-align:center;font-size:11px;font-weight:700;background:${b.done?b.bg:'var(--card2)'};border:1px solid ${b.done?b.border:'var(--border)'};color:${b.done?b.col:'var(--muted)'}">${b.done?'✅':'🔒'} ${b.label}</div>`).join('');
   // Progress bar to next milestone
   const nextMilestone = perfWeeks < 4 ? 4 : perfWeeks < 8 ? 8 : null;
   if (nextMilestone) {
-    const prev = nextMilestone === 4 ? 0 : 4;
-    const pct = Math.round(((perfWeeks-prev)/(nextMilestone-prev))*100);
-    document.getElementById('prog-week-bar').style.width = pct+'%';
+    const prevMs = nextMilestone === 4 ? 0 : 4;
+    const weekPct = Math.round(((perfWeeks-prevMs)/(nextMilestone-prevMs))*100);
+    document.getElementById('prog-week-bar').style.width = weekPct+'%';
     document.getElementById('prog-week-next-label').textContent = `Progress to ${nextMilestone}-week milestone`;
     document.getElementById('prog-week-next-val').textContent = `${perfWeeks}/${nextMilestone} weeks`;
   } else {
