@@ -698,7 +698,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
     <span>Calendar</span>
   </button>
-  <button class="nav-btn" onclick="showPage('progress',this)">
+  <button class="nav-btn" onclick="showPage('progress',this);loadData().then(()=>{renderProgress();updateSpinBank();})">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
     <span>Progress</span>
   </button>
@@ -1431,7 +1431,9 @@ function changeMonth(dir){calMonth+=dir;if(calMonth>11){calMonth=0;calYear++;}if
 
 // PROGRESS
 function renderProgress(){
-  const stats=appData.stats;
+  try {
+  const stats=appData.stats || {};
+  if (!stats.totalWorkouts && stats.totalWorkouts !== 0) { setTimeout(()=>loadData().then(renderProgress), 500); return; }
   document.getElementById('prog-days-left').textContent=stats.daysUntilGoal?.toLocaleString()||'—';
   document.getElementById('prog-total').textContent=stats.totalWorkouts;
   document.getElementById('prog-cardio-min').textContent=stats.totalCardioMinutes;
@@ -1500,6 +1502,7 @@ function renderProgress(){
     item.innerHTML=`<div class="milestone-icon">${m.icon}</div><div class="milestone-info"><div class="milestone-name">${m.name}</div><div class="milestone-desc">${m.desc}</div></div><div>${achieved?'✅':'🔒'}</div>`;
     list.appendChild(item);
   });
+  } catch(e) { console.error('renderProgress error:', e); }
 }
 
 // ANIMATIONS
