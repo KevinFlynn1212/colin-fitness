@@ -805,7 +805,8 @@ function renderHome() {
     document.getElementById('today-card').style.borderColor = 'var(--green)';
     document.getElementById('today-badge').innerHTML = '✅ Logged today!';
   }
-  document.getElementById('stat-streak').textContent = stats.currentStreak;
+  const streak = stats.currentStreak || 0;
+  document.getElementById('stat-streak').textContent = streak;
   document.getElementById('stat-days-to-60-banner').textContent = stats.daysUntilGoal?.toLocaleString() || '—';
   document.getElementById('stat-month-done').textContent = stats.monthWorkouts;
   document.getElementById('stat-missed').textContent = stats.monthMissed;
