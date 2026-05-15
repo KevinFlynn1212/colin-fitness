@@ -184,7 +184,7 @@ function computeStats(data, clientToday) {
 
   // Count dog walks
   const totalWalks = logDates.filter(d => logs[d] && logs[d].type==='active' && logs[d].walked).length;
-  if (totalWalks>=10 && !m.walks10) { m.walks10=true; if(!spins.walks10)spins.walks10=true; }
+  if (totalWalks>=10 && !m.walks10) { m.walks10=true; } // milestone badge only, spins handled cyclically
   if ((currentStreak>=30||longestStreak>=30) && !m.streak30) { m.streak30=true; if(!spins.streak30)spins.streak30=true; }
   if (totalWorkouts>=100 && !m.workouts100) { m.workouts100=true; if(!spins.workouts100)spins.workouts100=true; }
   if (totalCardioMinutes>=1000 && !m.cardio1000min) { m.cardio1000min=true; if(!spins.cardio1000)spins.cardio1000=true; }
@@ -318,12 +318,18 @@ app.post('/api/walk', (req,res) => {
   if (!data.walks) data.walks = [];
   data.walks.push({date: date || new Date().toISOString().split('T')[0], loggedAt: new Date().toISOString()});
   const totalWalks = data.walks.length;
-  // Check 10-walk milestone
   if (!data.milestones) data.milestones = {};
   if (!data.spinsAvailable) data.spinsAvailable = {};
-  if (totalWalks >= 10 && !data.milestones.walks10) {
-    data.milestones.walks10 = true;
-    data.spinsAvailable.walks10 = true;
+  // Milestone badge at 10 walks
+  if (totalWalks >= 10 && !data.milestones.walks10) data.milestones.walks10 = true;
+  // Cycling spin rewards: every 10 walks = small, every 40 = medium, every 80 = jackpot
+  if (totalWalks > 0 && totalWalks % 10 === 0) {
+    const spinKey = `walks_${totalWalks}`;
+    if (!data.spinsAvailable[spinKey]) {
+      if (totalWalks % 80 === 0) data.spinsAvailable[spinKey] = 'jackpot';
+      else if (totalWalks % 40 === 0) data.spinsAvailable[spinKey] = 'medium';
+      else data.spinsAvailable[spinKey] = 'small';
+    }
   }
   saveData(data);
   res.json({success:true, totalWalks});
