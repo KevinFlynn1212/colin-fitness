@@ -74,13 +74,11 @@ function checkAndAwardWeeklySpins(data, today) {
         cd.setDate(cd.getDate() - 7);
         if (consecutive > 52) break;
       }
-      // Award spin based on consecutive count
+      // Award spin — cycles every 8 weeks: 8th=jackpot, 4th=medium, rest=small
       if (!data.spinsAvailable[spinKey]) {
-        if (consecutive >= 8 && !data.weeklyMilestones.weeks8) {
-          data.weeklyMilestones.weeks8 = wm;
+        if (consecutive % 8 === 0) {
           data.spinsAvailable[spinKey] = 'jackpot';
-        } else if (consecutive >= 4 && !data.weeklyMilestones.weeks4) {
-          data.weeklyMilestones.weeks4 = wm;
+        } else if (consecutive % 4 === 0) {
           data.spinsAvailable[spinKey] = 'medium';
         } else {
           data.spinsAvailable[spinKey] = 'small';
