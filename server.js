@@ -25,6 +25,85 @@ function getDefaultData() {
 
 function saveData(data) { fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2)); }
 
+function getWeekMonday(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  const day = d.getDay();
+  const diff = day === 0 ? -6 : 1 - day;
+  d.setDate(d.getDate() + diff);
+  return d.toISOString().split('T')[0];
+}
+
+function checkAndAwardWeeklySpins(data, today) {
+  if (!data.weeklyRewards) data.weeklyRewards = {};
+  if (!data.spinsAvailable) data.spinsAvailable = {};
+  if (!data.weeklyMilestones) data.weeklyMilestones = {};
+
+  const startDate = data.startDate || '2026-05-08';
+  const d = new Date(getWeekMonday(startDate) + 'T12:00:00');
+  const todayDate = new Date(today + 'T12:00:00');
+
+  while (d <= todayDate) {
+    const wm = d.toISOString().split('T')[0];
+    const spinKey = `week_${wm}`;
+
+    // Skip if already awarded
+    if (data.weeklyRewards[wm] && data.spinsAvailable[spinKey]) { d.setDate(d.getDate() + 7); continue; }
+
+    // Week must be over (Friday+ for Mon-Thu week)
+    const thurDate = new Date(d); thurDate.setDate(d.getDate() + 3);
+    const thurStr = thurDate.toISOString().split('T')[0];
+    if (thurStr > today) { d.setDate(d.getDate() + 7); continue; }
+
+    // Check all 4 days (Mon-Thu) logged
+    const weekDates = [];
+    for (let i = 0; i < 4; i++) {
+      const wd = new Date(d); wd.setDate(d.getDate() + i);
+      weekDates.push(wd.toISOString().split('T')[0]);
+    }
+    const allDone = weekDates.every(ds =>
+      data.logs[ds] && ['cardio','strength','cheat'].includes(data.logs[ds].type)
+    );
+
+    if (allDone && !data.weeklyRewards[wm]) {
+      data.weeklyRewards[wm] = true;
+      // Count consecutive perfect weeks ending here
+      let consecutive = 0;
+      const cd = new Date(wm + 'T12:00:00');
+      while (data.weeklyRewards[cd.toISOString().split('T')[0]] === true) {
+        consecutive++;
+        cd.setDate(cd.getDate() - 7);
+        if (consecutive > 52) break;
+      }
+      // Award spin based on consecutive count
+      if (!data.spinsAvailable[spinKey]) {
+        if (consecutive >= 8 && !data.weeklyMilestones.weeks8) {
+          data.weeklyMilestones.weeks8 = wm;
+          data.spinsAvailable[spinKey] = 'jackpot';
+        } else if (consecutive >= 4 && !data.weeklyMilestones.weeks4) {
+          data.weeklyMilestones.weeks4 = wm;
+          data.spinsAvailable[spinKey] = 'medium';
+        } else {
+          data.spinsAvailable[spinKey] = 'small';
+        }
+      }
+    }
+    d.setDate(d.getDate() + 7);
+  }
+
+  // Count current consecutive perfect weeks for stats display
+  let consecutivePerfectWeeks = 0;
+  const currentWM = getWeekMonday(today);
+  const cd = new Date((data.weeklyRewards[currentWM] ? currentWM : (() => {
+    const prev = new Date(currentWM + 'T12:00:00'); prev.setDate(prev.getDate() - 7); return prev.toISOString().split('T')[0];
+  })()) + 'T12:00:00');
+  while (data.weeklyRewards[cd.toISOString().split('T')[0]] === true) {
+    consecutivePerfectWeeks++;
+    cd.setDate(cd.getDate() - 7);
+    if (consecutivePerfectWeeks > 52) break;
+  }
+  return consecutivePerfectWeeks;
+}
+
 function computeStats(data, clientToday) {
   const logs = data.logs;
   const logDates = Object.keys(logs).sort();
@@ -115,18 +194,15 @@ function computeStats(data, clientToday) {
   if (daysSinceStart>=180) m.sixMonths=true;
   if (daysSinceStart>=365) m.oneYear=true;
 
-  // Streak-based spins (every 7 days, every 14, every 30)
-  if (currentStreak>0 && currentStreak%7===0 && currentStreak<=13 && !spins[`streak${currentStreak}`]) {
-    spins[`streak${currentStreak}`]=true;
-  }
-  if (currentStreak===14 && !spins.streak14) spins.streak14=true;
-
   data.milestones = m;
   data.spinsAvailable = spins;
+
+  const consecutivePerfectWeeks = checkAndAwardWeeklySpins(data, today);
 
   return {
     currentStreak, longestStreak, totalCardioMinutes, totalStrengthSessions,
     totalCardioSessions, totalWorkouts, totalVolume:Math.round(totalVolume), totalWalks,
+    consecutivePerfectWeeks,
     zone2Compliance:totalCardioSessions>0?Math.round((cardioZone2Sessions/totalCardioSessions)*100):0,
     monthWorkouts, monthMissed, weekDone, weekTotal:4,
     workoutsToGoal:Math.max(0,workoutGoal-totalWorkouts),
@@ -152,6 +228,15 @@ app.post('/api/log', (req,res) => {
   const {date,log} = req.body;
   if (!date||!log) return res.status(400).json({error:'date and log required'});
   data.logs[date] = {...log, loggedAt:new Date().toISOString()};
+  // Bonus workout on rest day (Fri/Sat/Sun) earns a cheat day
+  let bonusCheatDay = false;
+  const logDow = new Date(date + 'T12:00:00').getDay();
+  if ((logDow === 0 || logDow === 5 || logDow === 6) && ['cardio','strength'].includes(log.type)) {
+    data.cheatDays = (data.cheatDays || 0) + 1;
+    if (!data.cheatHistory) data.cheatHistory = [];
+    data.cheatHistory.push({date, type:'earned', amount:1, prize:'Bonus Workout on Rest Day 💫'});
+    bonusCheatDay = true;
+  }
   if (!data.prs) data.prs={};
   if (log.type==='strength'&&log.exercises) {
     for (const exId of Object.keys(log.exercises)) {
@@ -167,7 +252,7 @@ app.post('/api/log', (req,res) => {
   const clientToday = req.body.today || date;
   const stats = computeStats(data, clientToday);
   saveData(data);
-  res.json({success:true, stats, prs:data.prs});
+  res.json({success:true, stats, prs:data.prs, bonusCheatDay});
 });
 
 app.get('/api/log/:date', (req,res) => {
