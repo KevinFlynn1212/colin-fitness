@@ -1741,6 +1741,8 @@ function closeCardioCelebration() {
   document.getElementById('cardio-celebration').classList.remove('show');
   // Clear any lingering fireworks
   document.querySelectorAll('.firework').forEach(f => f.remove());
+  // Actually save the workout — this is what updates the streak!
+  submitLog();
 }
 
 function launchFireworks() {
