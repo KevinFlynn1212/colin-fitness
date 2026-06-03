@@ -126,7 +126,7 @@ function computeStats(data, clientToday) {
   const today = clientToday || new Date().toISOString().split('T')[0];
   let currentStreak=0;
   // Start from yesterday if today hasn't been logged yet (day isn't over)
-  let checkDate = new Date(today);
+  let checkDate = new Date(today + 'T12:00:00');
   if (!logs[today]) checkDate.setDate(checkDate.getDate()-1);
   while (true) {
     const ds = checkDate.toISOString().split('T')[0];
@@ -139,7 +139,7 @@ function computeStats(data, clientToday) {
   }
 
   let longestStreak=0, tempStreak=0;
-  let d = new Date(data.startDate), todayDate = new Date(today);
+  let d = new Date(data.startDate + 'T12:00:00'), todayDate = new Date(today + 'T12:00:00');
   while (d<=todayDate) {
     const ds=d.toISOString().split('T')[0], log=logs[ds], dow=new Date(ds).getDay();
     if (log && ['cardio','strength','active','cheat'].includes(log.type)) { tempStreak++; if(tempStreak>longestStreak)longestStreak=tempStreak; }
@@ -152,8 +152,8 @@ function computeStats(data, clientToday) {
   const monthStart = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-01`;
   let monthWorkouts=0, monthMissed=0;
   // Start from the later of month start or app start date so we don't count days before app began
-  let d2=new Date(data.startDate > monthStart ? data.startDate : monthStart);
-  while (d2<=new Date(today)) {
+  let d2=new Date((data.startDate > monthStart ? data.startDate : monthStart) + 'T12:00:00');
+  while (d2<=new Date(today + 'T12:00:00')) {
     const ds=d2.toISOString().split('T')[0], dow=d2.getDay(), log=logs[ds];
     if (dow!==0 && dow!==5 && dow!==6) { // exclude Fri/Sat/Sun (rest days)
       if (log && ['cardio','strength','active','cheat'].includes(log.type)) monthWorkouts++;

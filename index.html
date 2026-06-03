@@ -355,7 +355,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
     <div class="stat-card red"><div class="stat-value" id="stat-missed">0</div><div class="stat-label">❌ Missed</div></div>
   </div>
   <div class="stats-row" style="grid-template-columns:1fr 1fr;">
-    <div class="stat-card" style="border-color:var(--green);"><div class="stat-value" style="color:var(--green);" id="stat-walks">0</div><div class="stat-label">🐕 Dog Walks</div></div>
+    <div class="stat-card" style="border-color:var(--green);cursor:pointer;" onclick="quickLogWalk()">
+      <div class="stat-value" style="color:var(--green);" id="stat-walks">0</div>
+      <div class="stat-label">🐕 Dog Walks</div>
+      <div style="font-size:10px;color:var(--green);margin-top:4px;font-weight:700;">TAP TO LOG WALK</div>
+    </div>
     <div class="stat-card" style="border-color:var(--muted);"><div class="stat-value" style="color:var(--muted);font-size:18px;" id="stat-walks-to-spin">10 for spin</div><div class="stat-label">🎰 Walk Reward</div></div>
   </div>
 
@@ -1042,12 +1046,10 @@ function renderLog() {
   const walkCount = appData.totalWalks || 0;
   const walkEl = document.getElementById('walk-count-display');
   if (walkEl) {
-    const remaining = Math.max(0, 10 - walkCount);
-    if (walkCount >= 10) {
-      walkEl.textContent = `🎉 ${walkCount} walks total — milestone reached!`;
-    } else {
-      walkEl.textContent = `${walkCount} walks total · ${remaining} more for a spin reward 🎰`;
-    }
+    const nextMilestone = Math.ceil((walkCount + 1) / 10) * 10;
+    const walksLeft = nextMilestone - walkCount;
+    const tier = nextMilestone % 80 === 0 ? '💰 Jackpot' : nextMilestone % 40 === 0 ? '🎰 Medium' : '🎲 Small';
+    walkEl.textContent = `${walkCount} walks total · ${walksLeft} more for ${tier} spin 🎰`;
   }
 }
 
@@ -1279,20 +1281,36 @@ async function submitLog(){
 }
 async function logActiveRest(walked){
   if (!walked) { showToast('Walk skipped.'); return; }
+  await doLogWalk();
+}
+
+async function quickLogWalk() {
+  await doLogWalk();
+}
+
+async function doLogWalk() {
+  const today = getToday();
   try {
-    const res = await fetch('/fitness/api/walk', {
+    // Log a walk entry (for spin rewards)
+    const walkRes = await fetch('/fitness/api/walk', {
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({date:getToday(), today:getToday()})
+      body:JSON.stringify({date:today, today:today})
     });
-    const result = await res.json();
-    if (result.success) {
+    const walkResult = await walkRes.json();
+    // Also create a log entry so it shows on calendar and counts toward streak
+    await fetch('/fitness/api/log', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({date:today, log:{type:'active', walked:true}, today:today})
+    });
+    if (walkResult.success) {
       await loadData();
-      renderHome(); renderProgress(); renderLog();
+      renderHome(); renderProgress(); renderLog(); renderCalendar();
       // Show success
       document.getElementById('overlay-icon').textContent = '🐕';
       document.getElementById('overlay-title').textContent = 'Walk Logged!';
-      document.getElementById('overlay-sub').textContent = `${result.totalWalks} walk${result.totalWalks===1?'':'s'} total. Keep it up!`;
+      document.getElementById('overlay-sub').textContent = `${walkResult.totalWalks} walk${walkResult.totalWalks===1?'':'s'} total. Keep it up!`;
       document.getElementById('overlay-streak').style.display='none';
       document.getElementById('success-overlay').classList.add('show');
       launchCelebration();
