@@ -400,6 +400,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
 <!-- LOG -->
 <div class="page" id="page-log">
   <div class="page-header"><h1>📝 Log Workout</h1><p>Track every rep and minute</p></div>
+  <div id="log-already-done" style="display:none;"></div>
+  <div id="log-form-inner">
   <div class="date-selector">
     <label>Date</label>
     <input type="date" id="log-date" onchange="updateLogDateLabel()">
@@ -541,6 +543,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:24px; h
       <button class="btn btn-outline" onclick="logRest()">Log Rest Day</button>
     </div>
   </div>
+  </div><!-- /log-form-inner -->
 </div>
 
 <!-- CALENDAR -->
@@ -1051,6 +1054,32 @@ function renderLog() {
     const tier = nextMilestone % 80 === 0 ? '💰 Jackpot' : nextMilestone % 40 === 0 ? '🎰 Medium' : '🎲 Small';
     walkEl.textContent = `${walkCount} walks total · ${walksLeft} more for ${tier} spin 🎰`;
   }
+  // Lock form if today's workout is already logged
+  const todayLog = appData.logs[getToday()];
+  const alreadyLogged = todayLog && ['cardio','strength'].includes(todayLog.type);
+  const lockEl = document.getElementById('log-already-done');
+  const formEl = document.getElementById('log-form-inner');
+  if (lockEl && formEl) {
+    if (alreadyLogged) {
+      let icon = todayLog.type === 'cardio' ? '🚴' : '💪';
+      let detail = todayLog.type === 'cardio'
+        ? `${todayLog.minutes} min · ${todayLog.zone === 'zone2' ? 'Zone 2' : 'Zone 3+'} · ${todayLog.machine || 'Cardio'}`
+        : '💪 Strength Training';
+      lockEl.innerHTML = `
+        <div style="text-align:center;padding:32px 16px;">
+          <div style="font-size:64px;margin-bottom:12px;">${icon}</div>
+          <div style="font-size:22px;font-weight:900;color:var(--green);margin-bottom:8px;">Done for today! ✅</div>
+          <div style="font-size:15px;color:var(--muted);margin-bottom:4px;">${detail}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:16px;">Log unlocks again at midnight PST 🌙</div>
+          <div style="margin-top:20px;font-size:13px;font-weight:700;color:var(--blue);">🔥 Streak: ${(appData.stats||{}).currentStreak||0} days</div>
+        </div>`;
+      lockEl.style.display = 'block';
+      formEl.style.display = 'none';
+    } else {
+      lockEl.style.display = 'none';
+      formEl.style.display = 'block';
+    }
+  }
 }
 
 function updateLogDateLabel() {
@@ -1558,8 +1587,8 @@ function spawnCoins(el){
 function showPage(name,btn){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));document.getElementById(`page-${name}`).classList.add('active');btn.classList.add('active');}
 function goToLog(){const logBtn=document.querySelectorAll('.nav-btn')[1];showPage('log',logBtn);renderLog();}
 function getToday(){
-  const d=new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  // Always use Pacific time (PST/PDT) so date is correct for Colin
+  return new Intl.DateTimeFormat('en-CA',{timeZone:'America/Los_Angeles'}).format(new Date());
 }
 
 function showToast(msg) {
