@@ -2,10 +2,1105 @@
   "startDate": "2026-05-08",
   "goal": "Best Bove 60",
   "goalDate": "2031-10-18",
-  "logs": {},
+  "workoutGoal": 500,
+  "logs": {
+    "2026-05-11": {
+      "type": "strength",
+      "exercises": {
+        "leg-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "cable-rows": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "chest-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "shoulder-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "leg-curl": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "plank": {
+          "sets": [
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            }
+          ]
+        }
+      },
+      "feel": "good",
+      "loggedAt": "2026-05-11T10:00:00.000Z"
+    },
+    "2026-05-12": {
+      "type": "cardio",
+      "minutes": 30,
+      "machine": "Bike",
+      "zone": "zone2",
+      "feel": "good",
+      "loggedAt": "2026-05-12T10:00:00.000Z"
+    },
+    "2026-05-13": {
+      "type": "strength",
+      "exercises": {
+        "leg-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "cable-rows": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "chest-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "shoulder-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "leg-curl": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "plank": {
+          "sets": [
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            }
+          ]
+        }
+      },
+      "feel": "good",
+      "loggedAt": "2026-05-13T10:00:00.000Z"
+    },
+    "2026-05-14": {
+      "type": "cardio",
+      "minutes": 30,
+      "machine": "Bike",
+      "zone": "zone2",
+      "feel": "good",
+      "loggedAt": "2026-05-14T10:00:00.000Z"
+    },
+    "2026-05-18": {
+      "type": "strength",
+      "exercises": {
+        "leg-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "cable-rows": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "chest-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "shoulder-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "leg-curl": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "plank": {
+          "sets": [
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            }
+          ]
+        }
+      },
+      "feel": "good",
+      "loggedAt": "2026-05-18T10:00:00.000Z"
+    },
+    "2026-05-19": {
+      "type": "cardio",
+      "minutes": 30,
+      "machine": "Bike",
+      "zone": "zone2",
+      "feel": "good",
+      "loggedAt": "2026-05-19T10:00:00.000Z"
+    },
+    "2026-05-20": {
+      "type": "strength",
+      "exercises": {
+        "leg-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "cable-rows": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "chest-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "shoulder-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "leg-curl": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "plank": {
+          "sets": [
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            }
+          ]
+        }
+      },
+      "feel": "good",
+      "loggedAt": "2026-05-20T10:00:00.000Z"
+    },
+    "2026-05-21": {
+      "type": "cardio",
+      "minutes": 30,
+      "machine": "Bike",
+      "zone": "zone2",
+      "feel": "good",
+      "loggedAt": "2026-05-21T10:00:00.000Z"
+    },
+    "2026-05-25": {
+      "type": "strength",
+      "exercises": {
+        "leg-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "cable-rows": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "chest-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "shoulder-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "leg-curl": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "plank": {
+          "sets": [
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            }
+          ]
+        }
+      },
+      "feel": "good",
+      "loggedAt": "2026-05-25T10:00:00.000Z"
+    },
+    "2026-05-26": {
+      "type": "cardio",
+      "minutes": 30,
+      "machine": "Bike",
+      "zone": "zone2",
+      "feel": "good",
+      "loggedAt": "2026-05-26T10:00:00.000Z"
+    },
+    "2026-05-27": {
+      "type": "strength",
+      "exercises": {
+        "leg-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "cable-rows": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "chest-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "shoulder-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "leg-curl": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "plank": {
+          "sets": [
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            }
+          ]
+        }
+      },
+      "feel": "good",
+      "loggedAt": "2026-05-27T10:00:00.000Z"
+    },
+    "2026-05-28": {
+      "type": "cardio",
+      "minutes": 30,
+      "machine": "Bike",
+      "zone": "zone2",
+      "feel": "good",
+      "loggedAt": "2026-05-28T10:00:00.000Z"
+    },
+    "2026-06-01": {
+      "type": "strength",
+      "exercises": {
+        "leg-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "cable-rows": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "chest-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "shoulder-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "leg-curl": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "plank": {
+          "sets": [
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            }
+          ]
+        }
+      },
+      "feel": "good",
+      "loggedAt": "2026-06-01T10:00:00.000Z"
+    },
+    "2026-06-02": {
+      "type": "cardio",
+      "minutes": 30,
+      "machine": "Bike",
+      "zone": "zone2",
+      "feel": "good",
+      "loggedAt": "2026-06-02T10:00:00.000Z"
+    },
+    "2026-06-03": {
+      "type": "strength",
+      "exercises": {
+        "leg-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 90,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "cable-rows": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "chest-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 50,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "shoulder-press": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 30,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "leg-curl": {
+          "sets": [
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            },
+            {
+              "reps": 12,
+              "weight": 40,
+              "unit": "lbs"
+            }
+          ]
+        },
+        "plank": {
+          "sets": [
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            },
+            {
+              "reps": 30,
+              "weight": null,
+              "unit": "sec"
+            }
+          ]
+        }
+      },
+      "feel": "good",
+      "loggedAt": "2026-06-03T10:00:00.000Z"
+    }
+  },
+  "prs": {
+    "leg-press": {
+      "weight": 90,
+      "reps": 12,
+      "date": "2026-05-11"
+    },
+    "cable-rows": {
+      "weight": 40,
+      "reps": 12,
+      "date": "2026-05-11"
+    },
+    "chest-press": {
+      "weight": 50,
+      "reps": 12,
+      "date": "2026-05-11"
+    },
+    "shoulder-press": {
+      "weight": 30,
+      "reps": 12,
+      "date": "2026-05-11"
+    },
+    "leg-curl": {
+      "weight": 40,
+      "reps": 12,
+      "date": "2026-05-11"
+    }
+  },
+  "bodyWeight": {},
+  "cheatDays": 12,
+  "spinsAvailable": {},
+  "walks": [],
+  "weeklyRewards": {
+    "2026-05-11": true,
+    "2026-05-18": true,
+    "2026-05-25": true
+  },
+  "cheatHistory": [
+    {
+      "date": "2026-05-17",
+      "type": "earned",
+      "amount": 3,
+      "prize": "\ud83c\udf89 Perfect Week 1 Spin"
+    },
+    {
+      "date": "2026-05-24",
+      "type": "earned",
+      "amount": 3,
+      "prize": "\ud83c\udf89 Perfect Week 2 Spin"
+    },
+    {
+      "date": "2026-05-31",
+      "type": "earned",
+      "amount": 3,
+      "prize": "\ud83c\udf89 Perfect Week 3 Spin"
+    },
+    {
+      "date": "2026-06-01",
+      "type": "earned",
+      "amount": 1,
+      "prize": "\ud83d\udd25 7-Day Streak Milestone"
+    },
+    {
+      "date": "2026-06-02",
+      "type": "earned",
+      "amount": 2,
+      "prize": "\ud83d\udcaa First Month Bonus"
+    }
+  ],
   "milestones": {
-    "firstWorkout": false,
-    "streak7": false,
+    "firstWorkout": true,
+    "walks10": false,
+    "streak7": true,
     "workouts30": false,
     "cardio500min": false,
     "streak30": false,
